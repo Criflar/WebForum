@@ -14,9 +14,7 @@
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                 </svg>           
             </div>
-            <div class="navbar-title">
-                <a href='index.html' class="navbar-title">Reddit</a>
-            </div>
+            <a href='index-logged-in.html' class="navbar-title">Reddit</a>
             <div class="navbar-search">
                 <input type="text" placeholder="Search..." id="searchfield">
                 <select name="communities" id="community-select">
@@ -27,11 +25,19 @@
                     <option value="movies">Movies</option>
                     <option value="pork">Pork</option>
                 </select>
-                <a href="search.html" id="search" >Search</a>
+                <button id="search">Search</button>
             </div>
             <div class="navbar-right">
-                <a href="youtube.com">Login</a>
-                <a href="youtube.com">Register</a>
+                <div class="profile-dropdown">
+                    <img src="john.jpg" class="avatar" id="login-avatar">
+                    <div class="profile-dropdown-menu">
+                        <ul>
+                           <li><a href="#">View Profile</a></li>
+                            <li><a href="#">Edit Profile</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container-inner">
