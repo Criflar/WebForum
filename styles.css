@@ -5,7 +5,6 @@
 
 body {
     margin: 0;
-    background-color: black;
     color: white;
 }
 
@@ -19,14 +18,14 @@ body {
     flex-flow: row nowrap;
     width: 100%;
     margin-top: 50px;
+    background-color: #121212;
 }
 
 .sidebar {
     flex: 0 0 250px;
-    width: 250px;
+    width: 225px;
     height: 100vh;
-    background-color: black;
-    border: 1px solid rgb(46, 46, 46);
+    background-color: rgb(11, 11, 11);
     position: absolute;
     transition: 0.3s;
     z-index: 1000;
@@ -64,8 +63,8 @@ body {
     height: 50px;
     width: 100%;
     display: flex;
-    border: 0.1px solid rgb(46, 46, 46);;
-    background-color: black;
+
+    background-color: rgb(11, 11, 11);
     z-index: 1001;
     font-weight: 600
 }
@@ -177,6 +176,7 @@ body {
     margin-left: 250px;
     transition: 0.3s;
     padding: 20px;
+    background-color: #121212;
 }
 
 .main-content-container-top {
