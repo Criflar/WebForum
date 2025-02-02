@@ -40,7 +40,7 @@ body {
     left: -100%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .sidebar {
         height:150%;
         position: absolute;
@@ -55,6 +55,11 @@ body {
      body .main-content {
         margin-left: 0px;
     }
+
+    body .navbar-title {
+        display: none;
+    }
+
 }
 
 
@@ -97,7 +102,11 @@ body {
     align-content: center;
 }
 
-.navbar-right #register-button, #login-button :hover {
+.navbar-right #login-button:hover {
+    background-color: rgb(77, 77, 77);
+    color: white;
+}
+.navbar-right #register-button:hover {
     background-color: rgb(77, 77, 77);
     color: white;
 }
@@ -228,7 +237,7 @@ body {
     display: flex;
     margin: 1px;
     width: 100%;
-    min-height: 120px;
+    min-height: 80px;
     min-width: 50%;
 }
 
@@ -237,8 +246,8 @@ body {
 .avatar {
     border-radius: 50%;
     margin: 0px;
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
 }
 
 #login-avatar {
@@ -285,12 +294,13 @@ body {
     width: 80%;
     margin-top: 10px;
     margin-left: 10px;
+    height: 100%;
 }
 
 
 .post-title a{
     color: #ff0abe;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 600;
     text-decoration: none;
     margin-left: -3px;
@@ -298,17 +308,18 @@ body {
 
 .post-desc {
     color: white;
-    font-size: 14px;
+    font-size: 12px;
     height: 40%;
     overflow: hidden;
 }
 
 .post-author-community {
-    font-size: 14px;
+    font-size: 12px;
     color: #ff98db;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     gap: 7px;
 }
 
@@ -336,7 +347,7 @@ body {
 
 dt,dd {
     display: inline-block;
-    font-size: 12px;
+    font-size: 10px;
     margin: 0;
 }
 
