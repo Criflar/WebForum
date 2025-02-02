@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John Pork</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="hamburger-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                </svg>           
+            </div>
+            <div class="navbar-title">
+                <a href='index.html' class="navbar-title">Reddit</a>
+            </div>
+            <div class="navbar-search">
+                <input type="text" placeholder="Search..." id="searchfield">
+                <select name="communities" id="community-select">
+                    <option value="everywhere">All</option>
+                    <option value="general">General</option>
+                    <option value="gaming">Gaming</option>
+                    <option value="technology">Technology</option>
+                    <option value="movies">Movies</option>
+                    <option value="pork">Pork</option>
+                </select>
+                <a href="search.html" id="search" >Search</a>
+            </div>
+            <div class="navbar-right">
+                <a href="youtube.com">Login</a>
+                <a href="youtube.com">Register</a>
+            </div>
+        </div>
+        <div class="container-inner">
+            <nav class="sidebar">
+                <h3>Communities</h3>
+                <ul>
+                    <li>General</li>
+                    <li>Gaming</li>
+                    <li>Technology</li>
+                    <li>Movies</li>
+                    <li>Pork</li>
+                </ul>
+            </nav>
+            <div class="main-content">
+                <form id="postform" onsubmit="return addPostFieldValidation()">
+                    <label for="addpost-title-input">Post Title</label>
+                    <input type="text" id="addpost-title-input" name="addpost-title-input">
+                    
+                    <label for="addpost-community-input">Community</label>
+                    <select name="addpost-communities" id="addpost-community-input">
+                        <option value="addpost-general">General</option>
+                        <option value="addpost-gaming">Gaming</option>
+                        <option value="addpost-technology">Technology</option>
+                        <option value="addpost-movies">Movies</option>
+                        <option value="addpost-pork">Pork</option>
+                    </select>
+                    
+                    <label for="addpost-description-input">Post Description</label>
+                    <textarea id="addpost-description-input" name="addpost-description-input"></textarea>
+                    
+                    <button type="submit">Submit Post</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="app.js">
+    </script>
+</body>
+</html>
