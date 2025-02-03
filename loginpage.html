@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .login-view {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login-view h1 {
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .login-view label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        .login-view input[type="text"],
+        .login-view input[type="password"] {
+            width: 93%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+        .login-view .remember {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .login-view .remember input {
+            margin-right: 5px;
+        }
+        .login-view button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .login-view button:hover {
+            background-color: #0056b3;
+        }
+        .login-view .register {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .login-view .register a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-view .register a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-view">
+        <h1>Login</h1>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <div class="remember">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember</label>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+        <div class="register">
+            <p>Don't have an account? <a href="register.html">Click Here</a> </p> 
+        </div>
+    </div>
+</body>
+</html>

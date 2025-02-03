@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .register-view {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .register-view h1 {
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .register-view label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .register-view input[type="text"],
+        .register-view input[type="password"] {
+            width: 93%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .register-view button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .register-view button:hover {
+            background-color: #218838;
+        }
+        .register-view .back-to-login {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .register-view .back-to-login a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .register-view .back-to-login a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-view">
+        <h1>Register</h1>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div class="back-to-login">
+            <p>Already have an account? <a href="loginpage.html">Back to Login</a> </p>
+        </div>
+    </div>
+</body>
+</html>
