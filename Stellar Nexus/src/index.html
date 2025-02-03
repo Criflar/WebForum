@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <img src="../images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+        </div>
+        
+        <div class="navbar-search">
+            <img src="../images/Telescope.png" alt="Telescope" class="search-icon">
+            <input type="text" placeholder="Time to search the sky!" class="search-input">
+            <select name="communities" id="community-select" class="search-select">
+                <option value="all">All</option>
+                <option value="general">Orion's Belt</option>
+                <option value="tech">Ursa Major</option>
+                <option value="arts">Lyra</option>
+                <option value="science">Andromeda</option>
+                <option value="selling">Cosmic Marketplace</option>
+            </select>
+        </div>
+            
+        <div class="navbar-right">
+            <button id="login-button" onclick="location.href='loginpage.html';">Log In</button>
+        </div>
+    </header>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+            <h2>Communities</h2>
+            <ul>
+                <li>
+                <img src="../images/Orion.png" alt="Orion's Belt" />
+                Orion's Belt
+                </li>
+                <li>
+                <img src="../images/Ursa Major.png" alt="Ursa Major" />
+                Ursa Major
+                </li>
+                <li>
+                <img src="../images/Lyra.png" alt="Lyra" />
+                Lyra
+                </li>
+                <li>
+                <img src="../images/Andromeda.png" alt="Andromeda" />
+                Andromeda
+                </li>
+                <li>
+                <img src="../images/Cosmic Marketplace.png" alt="Cosmic Marketplace" />
+                Cosmic Marketplace
+                </li>
+            </ul>
+            </div>
+        </aside>
+
+        <aside class="right-sidebar">
+            <!-- Home Card -->
+            <div class="card home-card">
+                <div class="card-image-wrapper">
+                    <img src="../images/Home Image.png" alt="Home Image" class="card-image">
+                </div>
+                <div class="card-content">
+                    <div class="card-heading">
+                        <img src="../images/Earth Icon.png" alt="Earth Icon" class="heading-icon">
+                        <h2>Home</h2>
+                    </div>
+                    <p>This is the home page of Stellar Nexus! Navigate around by clicking what you see.</p>
+                </div> 
+            </div>
+          
+            <!-- Contact Us Card -->
+            <div class="card contact-card">
+              <h2>Contact Us!</h2>
+              <p>For any concerns with the forum, please send an email to the developers:</p>
+              <div class="contact-list-wrapper">
+                <ul>
+                    <li>Marvin Ivan Mangubat<br>marvin_mangubat@dlsu.edu.ph</li>
+                    <li>Radny Intino<br>radny_intino@dlsu.edu.ph</li>
+                    <li>Russell Emmanuel Galan<br>russell_galan@dlsu.edu.ph</li>
+                </ul>
+            </div>
+            </div>
+          </aside>
+
+    </div>
+   
+</body>
+</html>
