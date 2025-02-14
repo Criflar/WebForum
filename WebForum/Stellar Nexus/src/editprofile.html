@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Stellar Nexus</title>
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="loggedin.html">
+            <img src="../images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+            </a>
+        </div>
+        
+        <div class="navbar-search">
+            <img src="../images/Telescope.png" alt="Telescope" class="search-icon">
+            <input type="text" placeholder="Time to search the sky!" class="search-input">
+            <select name="communities" id="community-select" class="search-select">
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="tech">Technology</option>
+                <option value="arts">Arts</option>
+                <option value="science">Science</option>
+                <option value="selling">Marketplace</option>
+            </select>
+        </div>
+            
+        <div class="navbar-right">
+            <img src="../../john.jpg" class="user-pic" alt="User Picture" onclick="toggleMenu()">
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="../../john.jpg" class="user-pic" alt="User Picture">
+                        <h3>John Pork</h3>
+                    </div>
+                    <hr>
+
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/profile.png" alt="View Profile">
+                        <p onclick="document.location='profile.html'">View Profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/editprofile.png" alt="Edit Profile">
+                        <p onclick="document.location='editprofile.html'">Edit Profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/logout.png" alt="Log Out">
+                        <p onclick="document.location='index.html'">Log Out</p>
+                        <span>></span>
+                    </a>
+                    
+                </div>
+            </div>         
+        </div>
+
+    </header>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+            <h2>Communities</h2>
+            <ul>
+                <li>
+                <img src="../images/General.png" alt="General" />
+                General
+                </li>
+                <li>
+                <img src="../images/Technology.png" alt="Technology" />
+                Technology
+                </li>
+                <li>
+                <img src="../images/Arts.png" alt="Arts" />
+                Arts
+                </li>
+                <li>
+                <img src="../images/Science.png" alt="Science" />
+                Science
+                </li>
+                <li>
+                <img src="../images/Marketplace.png" alt="Marketplace" />
+                Marketplace
+                </li>
+            </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+
+            <div class="edit-profile-container">
+                <h1 style="color: rgb(53, 47, 47)">Edit Profile</h1>
+                <div class="profile-info">
+                    <div class="edit-img-container">
+                        <img src="../images/john.jpg">
+                        <i  class="fa">&#xf030;</i>
+                    </div>
+                    <div class="profile-view-name-desc-container">
+                        <h2>John Pork</h2>
+                        <div id="profile-view-desc">
+                            <span>Edit Description</span>
+                            <textarea id="edit-profile-description-input"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit">Save Changes</button>
+            </div>
+            
+        </div>
+
+        <aside class="right-sidebar">
+
+          
+           
+          </aside>
+
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>
