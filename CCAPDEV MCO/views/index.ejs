@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/">
+            <img src="../images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+            </a>
+        </div>
+        
+        <div class="navbar-search">
+            <img src="../images/Telescope.png" alt="Telescope" class="search-icon">
+            <input type="text" placeholder="Time to search the sky!" class="search-input">
+            <select name="communities" id="community-select" class="search-select">
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="tech">Technology</option>
+                <option value="arts">Arts</option>
+                <option value="science">Science</option>
+                <option value="selling">Marketplace</option>
+            </select>
+        </div>
+
+        <div class="navbar-right">
+            <button id="login-button">Log In</button>
+        </div>
+                    <!-- Login Popup -->
+            <div class="overlay" id="login-overlay">
+                <div class="popup">
+                    <div class="close-btn">&times;</div>
+                    <div class="form">
+                        <h2>Log In</h2>
+                        <div class="form-element">
+                            <label for="login-email">Email</label>
+                            <input type="text" class="email" id="login-email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-element">
+                            <label for="login-password">Password</label>
+                            <input type="password" class="password" id="login-password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-element">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Remember me</label>
+                        </div>
+                        <div class="form-element">
+                            <button type="submit" onclick="document.location='loggedin.html'">Log In</button>
+                        </div>
+                        <div class="form-element">
+                            <p>New to Stellar Nexus? <a href="#" id="open-signup">Sign Up</a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sign-up Popup -->
+            <div class="overlay" id="signup-overlay">
+                <div class="popup">
+                    <div class="close-btn">&times;</div>
+                    <div class="form">
+                        <h2>Register</h2>
+                        <div class="form-element">
+                            <label for="signup-email">Email</label>
+                            <input type="text" class="email" id="signup-email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-element">
+                            <label for="signup-password">Password</label>
+                            <input type="password" class="password" id="signup-password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-element">
+                            <button type="submit" onclick="document.location='index.html'">Register</button>
+                        </div>
+                        <div class="form-element">
+                            <p>Already a member? <a href="#" id="open-signin">Sign In</a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </header>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+            <h2>Communities</h2>
+            <ul>
+                <li>
+                <img src="../images/General.png" alt="General" />
+                General
+                </li>
+                <li>
+                <img src="../images/Technology.png" alt="Technology" />
+                Technology
+                </li>
+                <li>
+                <img src="../images/Arts.png" alt="Arts" />
+                Arts
+                </li>
+                <li>
+                <img src="../images/Science.png" alt="Science" />
+                Science
+                </li>
+                <li>
+                <img src="../images/Marketplace.png" alt="Marketplace" />
+                Marketplace
+                </li>
+            </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="main-content-container-top">
+                <div class="sort-post-buttons">
+                    <a href="#" id="sort-popular-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Popular
+                    </a>
+                    <a href="#" id="sort-newest-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Newest
+                    </a>
+                </div>
+                <a href="/posts/new" id="create-post-button">Create Post</a>
+                
+            </div>    
+
+            <div class="post-list">
+                <% posts.forEach(post => { %>
+                    <div class="post-item" >
+                        <div class="post-author">
+                            <img src="../../john.jpg">
+                            <a href="profile.html"><%=post.author%></a>
+                            <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                        </div>
+                        <a href="/posts/<%= post._id %>" class="post-title">
+                            <h1>
+                                <%=post.title%>
+                            </h1>
+                        </a>                    
+                        <div class="post-desc">
+                            <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                        </div>
+                        <div class="post-item-bottom">
+                            <div class="post-score">
+                                
+                                <img src="../images/upvote.png" alt="upvote"/>
+                                6
+                                <img src="../images/downvote.png" alt="downvote" />
+                            </div>
+                            <a href="#" class="post-community">
+                                <%=post.community%>
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+
+                
+
+            </div>
+        </div>
+
+        <aside class="right-sidebar">
+            <!-- Home Card -->
+            <div class="card home-card">
+                <div class="card-image-wrapper">
+                    <img src="../images/Home Image.png" alt="Home Image" class="card-image">
+                </div>
+                <div class="card-content">
+                    <div class="card-heading">
+                        <img src="../images/Earth Icon.png" alt="Earth Icon" class="heading-icon">
+                        <h2>Home</h2>
+                    </div>
+                    <p>This is the home page of Stellar Nexus! Navigate around by clicking what you see.</p>
+                </div> 
+            </div>
+          
+            <!-- Contact Us Card -->
+            <div class="card contact-card">
+              <h2>Contact Us!</h2>
+              <p>For any concerns with the forum, please send an email to the developers:</p>
+              <div class="contact-list-wrapper">
+                <ul>
+                    <li>Marvin Ivan Mangubat<br>marvin_mangubat@dlsu.edu.ph</li>
+                    <li>Radny Intino<br>radny_intino@dlsu.edu.ph</li>
+                    <li>Russell Emmanuel Galan<br>russell_galan@dlsu.edu.ph</li>
+                </ul>
+            </div>
+            </div>
+          </aside>
+
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>
