@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="loggedin.html">
+            <img src="../images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+            </a>
+        </div>
+        
+        <div class="navbar-search">
+            <img src="../images/Telescope.png" alt="Telescope" class="search-icon">
+            <input type="text" placeholder="Time to search the sky!" class="search-input">
+            <select name="communities" id="community-select" class="search-select">
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="tech">Technology</option>
+                <option value="arts">Arts</option>
+                <option value="science">Science</option>
+                <option value="selling">Marketplace</option>
+            </select>
+        </div>
+            
+        <div class="navbar-right">
+            <img src="../../john.jpg" class="user-pic" alt="User Picture" onclick="toggleMenu()">
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="../../john.jpg" class="user-pic" alt="User Picture">
+                        <h3>John Pork</h3>
+                    </div>
+                    <hr>
+
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/profile.png" alt="View Profile">
+                        <p onclick="document.location='profile.html'">View Profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/editprofile.png" alt="Edit Profile">
+                        <p onclick="document.location='editprofile.html'">Edit Profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <img src="../images/logout.png" alt="Log Out">
+                        <p onclick="document.location='index.html'">Log Out</p>
+                        <span>></span>
+                    </a>
+                </div>
+            </div>         
+        </div>
+
+    </header>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+            <h2>Communities</h2>
+            <ul>
+                <li>
+                <img src="../images/General.png" alt="General" />
+                General
+                </li>
+                <li>
+                <img src="../images/Technology.png" alt="Technology" />
+                Technology
+                </li>
+                <li>
+                <img src="../images/Arts.png" alt="Arts" />
+                Arts
+                </li>
+                <li>
+                <img src="../images/Science.png" alt="Science" />
+                Science
+                </li>
+                <li>
+                <img src="../images/Marketplace.png" alt="Marketplace" />
+                Marketplace
+                </li>
+            </ul>
+            </div>
+        </aside>
+
+        <div class="main-content">
+
+            <div class="profile-info">
+                <img src="../images/john.jpg">
+                <div class="profile-view-name-desc-container">
+                    <div id="profile-view-name">
+                        John Pork
+                    </div>
+                    <div id="profile-view-desc">
+                        <h3>About Me!</h3> <br>
+                        <br>
+                        <p>Fashion Model<br>
+                            👑🐽 @pynkynk<br>
+                            collab@johnpork.com<br>
+                            MERCH 👇<br>
+                            <a href="https://shop.johnpork.com/">shop.johnpork.com</a>
+                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-button-container">
+                <button>Overview</button>
+                <button>Posts</button>
+                <button>Comments</button>
+            </div>
+            <div class="post-list">
+                <div class="post-item">
+                    <div class="post-author">
+                        <img src="../images/john.jpg">
+                        <a href="profile.html">John Pork</a>
+                        <div class="post-time">1 hour ago</div>
+                    </div>
+                    <a href="postviewlogged.html" class="post-title">
+                        <h1>
+                            Thoughts on the Switch 2?
+                        </h1>
+                    </a>
+                    
+                    <div class="post-desc">
+                        Alright, so Nintendo just recently revealed the Switch 2, which has been confirmed
+                        to have significantly better hardware than its predecessor and backwards compatibility.
+                        Personally, I am very hyped about this announcement so far and looking forward to...
+                    </div>
+                    <div class="post-item-bottom">
+                        <div class="post-score">
+                            
+                            <img src="../images/upvote.png" alt="upvote"/>
+                            217
+                            <img src="../images/downvote.png" alt="downvote" />
+                        </div>
+                        <a href="loggedin.html" class="post-community">
+                            Technology
+                        </a>
+                    </div>
+                </div>
+
+                <div class="profile-view-comment-item">
+                    <div class="profile-view-comment-item-post-title-container">
+                        <div class="profile-view-comment-item-post-title">
+                        Thoughts on the Switch 2?
+                        </div>
+                        <a href="loggedin.html" class="post-community">
+                            Technology
+                        </a>
+                    </div>
+                    
+                    <div class="profile-view-comment-author">
+                        <img src="../images/john.jpg">
+                        John Pork commented
+                        <div class="post-time">34 minutes ago</div>
+                    </div>
+
+                    <div class="profile-view-comment-body">
+                        <p>Nintendo always does its own thing, so I wouldn’t be surprised if they focus more on innovation than pure specs. But if we get DLSS support, that could be a massive leap for handheld visuals!</p>
+                    </div>
+
+                    <div class="post-item-bottom">
+                        <div class="post-score">
+                            
+                            <img src="../images/upvote.png" alt="upvote"/>
+                            4
+                            <img src="../images/downvote.png" alt="downvote" />
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-view-comment-item">
+                    <div class="profile-view-comment-item-post-title-container">
+                        <div class="profile-view-comment-item-post-title">
+                        The John Pork Pledge
+                        </div>
+                        <a href="loggedin.html" class="post-community">
+                            General
+                        </a>
+                    </div>
+                    
+                    <div class="profile-view-comment-author">
+                        <img src="../images/john.jpg">
+                        John Pork replied to Barack Obama
+                        <div class="post-time">1 hour ago</div>
+                    </div>
+
+                    <div class="profile-view-comment-body">
+                        <p>kys</p>
+                    </div>
+
+                    <div class="post-item-bottom">
+                        <div class="post-score">
+                            
+                            <img src="../images/upvote.png" alt="upvote"/>
+                            122
+                            <img src="../images/downvote.png" alt="downvote" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="right-sidebar">
+
+          
+           
+          </aside>
+
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>
