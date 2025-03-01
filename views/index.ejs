@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('partials/sidebar-left') %>
+
+        <div class="main-content">
+            <div class="main-content-container-top">
+                <div class="sort-post-buttons">
+                    <a href="#" id="sort-popular-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Popular
+                    </a>
+                    <a href="#" id="sort-newest-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Newest
+                    </a>
+                </div>
+                <% if (user) { %>
+                    <a href="/posts/new" id="create-post-button">Create Post</a>
+                <% } else { %>
+                    <a href="#" id="create-post-button" onclick="showLoginPopup()">Create Post</a>
+                <% } %>
+                
+            </div>    
+
+            <div class="post-list">
+                <% posts.forEach(post => { %>
+                    <div class="post-item" >
+                        <div class="post-author">
+                            <img src="../../john.jpg">
+                            <a href="profile.html"><%=post.author%></a>
+                            <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                        </div>
+                        <a href="/posts/<%= post._id %>" class="post-title">
+                            <h1>
+                                <%=post.title%>
+                            </h1>
+                        </a>                    
+                        <div class="post-desc">
+                            <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                        </div>
+                        <div class="post-item-bottom">
+                            <div class="post-score">
+                                
+                                <img src="../images/upvote.png" alt="upvote"/>
+                                6
+                                <img src="../images/downvote.png" alt="downvote" />
+                            </div>
+                            <a href="#" class="post-community">
+                                <%=post.community%>
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+
+                
+
+            </div>
+        </div>
+
+        <%- include('partials/sidebar-right') %>
+
+        <script src="/js/login.js"></script>
+    </div>
+</body>
+</html>

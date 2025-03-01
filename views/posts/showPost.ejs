@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('../partials/sidebar-left') %>
+
+        <div class="main-content">
+            <div class="post-container">
+                <div class="highlighted-post">
+                    <div class="post-author">
+                        <img src="../../john.jpg">
+                        <a href="profile.html"><%=post.author%></a>
+                        <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                    </div>
+                    <a href="#" class="post-title">
+                        <h1>
+                            <%=post.title%>
+                        </h1>
+                    </a>                    
+                    <div class="post-desc">
+                        <%=post.description%>
+                    </div>
+                    <div class="post-item-bottom">
+                        <div class="post-score">
+                            <img src="/images/upvote.png" alt="upvote" id="upvote1"/>
+                            217
+                            <img src="/images/downvote.png" alt="downvote" />
+                        </div>
+
+                        <div class="post-comment">
+                            <img src="/images/Comments.png" alt="icon">
+                            <p>Comment</p>
+                        </div>
+
+                        <a href="#" class="post-community">
+                            Technology
+                        </a> 
+                    </div>
+
+                    <div class="comment-box">
+                        <input type="text" placeholder="Add a comment">
+                    </div>
+
+                    <div class="sort-comments">
+                        <span>Sort by:
+                        <select class="sort-comments-select">
+                            <option value="Best">Best</option>
+                            <option value="Recent">Recent</option>
+                        </select></span> 
+                    </div>
+
+
+                    <!--Primary Comments in Post  use class="comment-item" when it is a primary comment-->
+                    <div class="comment-item">
+                        <div class="post-author">
+                            <img src="/images/Earth Icon.png">
+                            <a href="profile.html">PixelPioneer</a>
+                            <div class="post-time">10 minutes ago</div>
+                        </div>
+                        <div class="comment-spacing">
+                            <a href="index.html" class="post-title"> </a>                    
+                            <div class="comment-desc">
+                                The Nintendo Switch 2 is rumored to bring upgraded hardware, improved display, 
+                                and enhanced performance while maintaining its hybrid functionality. If true, 
+                                it could redefine portable gaming once again! 
+                            </div>
+                            <div class="post-item-bottom">
+                                <div class="comment-score">
+                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    6
+                                    <img src="/images/downvote.png" alt="downvote" />
+                                </div>
+        
+                                <div class="comment-item-pic">
+                                    <img src="/images/Comments.png" alt="icon">
+                                    <p>Reply</p>
+                                </div>
+                            </div>    
+                        </div>
+
+                        <!--Secondary Comments in Post (Replies in css file) use class="reply-item" when it is a secondary comment-->
+                        <div class="reply2-item">
+                            <div class="post-author">
+                                <img src="/images/Earth Icon.png">
+                                <a href="profile.html">GameByteX</a>
+                                <div class="post-time">8 minutes ago</div>
+                            </div>
+                            <div class="comment-spacing">
+                                <a href="index.html" class="post-title"> </a>                    
+                                <div class="comment-desc">
+                                    If the rumors are true, that’s going to be a game-changer! 
+                                    I just hope Nintendo balances power with battery life—no one 
+                                    wants a handheld that dies too fast. Also, backward compatibility would be a huge win. 
+                                    Can’t wait to see if they officially announce it soon! 
+                                </div>
+                                <div class="post-item-bottom">
+                                    <div class="comment-score">
+                                        <img src="/images/upvote.png" alt="upvote"/>
+                                        4
+                                        <img src="/images/downvote.png" alt="downvote" />
+                                    </div>
+            
+                                    <div class="comment-item-pic">
+                                        <img src="/images/Comments.png" alt="icon">
+                                        <p>Reply</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="reply-item">
+                                <div class="post-author">
+                                    <img src="/images/Earth Icon.png">
+                                    <a href="profile.html">JoyConnoisseur</a>
+                                    <div class="post-time">2 minutes ago</div>
+                                </div>
+                                <div class="comment-spacing">
+                                    <a href="index.html" class="post-title"> </a>                    
+                                    <div class="comment-desc">
+                                        Agreed! A more powerful Switch sounds amazing, but battery life and backward 
+                                        compatibility are key. If they nail both, plus improve the Joy-Cons to prevent 
+                                        drift issues, this could be the ultimate upgrade!
+                                    </div>
+                                    <div class="post-item-bottom">
+                                        <div class="comment-score">
+                                            <img src="/images/upvote.png" alt="upvote"/>
+                                            -1
+                                            <img src="/images/downvote.png" alt="downvote" id="downvote1"/>
+                                        </div>
+                
+                                        <div class="comment-item-pic">
+                                            <img src="/images/Comments.png" alt="icon">
+                                            <p>Reply</p>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--User 2-->
+                    <div class="comment-item">
+                        <div class="post-author">
+                            <img src="/images/Earth Icon.png">
+                            <a href="profile.html">LevelUpLad</a>
+                            <div class="post-time">56 minutes ago</div>
+                        </div>
+                        <div class="comment-spacing">
+                            <a href="index.html" class="post-title"> </a>                    
+                            <div class="comment-desc">
+                                I’m really hoping for OLED as the standard and maybe a higher refresh rate. 
+                                A smoother experience would make a huge difference, especially for fast-paced games! 
+                            </div>
+                            <div class="post-item-bottom">
+                                <div class="comment-score">
+                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    4
+                                    <img src="/images/downvote.png" alt="downvote" />
+                                </div>
+        
+                                <div class="comment-item-pic">
+                                    <img src="/images/Comments.png" alt="icon">
+                                    <p>Reply</p>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                    
+                    <!-- User 3 -->
+                    <div class="comment-item">
+                        <div class="post-author">
+                            <img src="../../john.jpg">
+                            <a href="profile.html">John Pork</a>
+                            <div class="post-time">34 minutes ago</div>
+                        </div>
+                        <div class="comment-spacing">
+                            <a href="index.html" class="post-title"> </a>                    
+                            <div class="comment-desc">
+                                Nintendo always does its own thing, so I wouldn’t be surprised if they focus more on 
+                                innovation than pure specs. But if we get DLSS support, that could be a massive leap for 
+                                handheld visuals! 
+                            </div>
+                            <div class="post-item-bottom">
+                                <div class="comment-score">
+                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    4
+                                    <img src="/images/downvote.png" alt="downvote" />
+                                </div>
+        
+                                <div class="comment-item-pic">
+                                    <img src="/images/Comments.png" alt="icon">
+                                    <p>Reply</p>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <%- include('../partials/sidebar-right') %>
+
+    </div>
+    
+    <script src="js/postviewlogin.js"></script>
+</body>
+</html>
