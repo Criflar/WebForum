@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Counter = require('./counter');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -28,6 +29,7 @@ const userSchema = new mongoose.Schema({
 
 // Hash passwords and increment userID before saving to database.
 userSchema.pre('save', async function(next) {
+
     try {
         if (this.isModified('password')) {  // Hash passwords only when they are modified/added
             // Generate salt and hash password
@@ -38,8 +40,13 @@ userSchema.pre('save', async function(next) {
 
         // Auto-increment userID before saving new user
         if (this.isNew) {
-            const lastUser = await mongoose.model('User').findOne().sort({ userID: -1 }); // Sort users in terms of descending id
-            this.userID = lastUser ? lastUser.userID + 1 : 1; // Start from 1 if no users exist
+            const counter = await Counter.findOneAndUpdate(
+                { _id: 'userID' },
+                { $inc: { seq: 1 } },
+                { new: true, upsert: true }
+            );
+
+            this.userID = counter.seq;
         }
 
         next(); 
