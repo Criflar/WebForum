@@ -9,10 +9,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    author: {
-        type: String,
-        required: true,
-    },
+    author: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true }, 
     createdAt: {
         type: Date,
         default: Date.now,
@@ -21,6 +21,11 @@ const postSchema = new mongoose.Schema({
     community: {
         type: String,
         required: true
+    },
+    score: {
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 

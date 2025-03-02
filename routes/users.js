@@ -72,8 +72,8 @@ router.get('/:userID', async (req, res) => {
             return res.redirect('/'); 
         } 
 
-        const posts = await Post.find({ author: user.username }) 
-            .sort({ createdAt: 'desc' });
+        const posts = await Post.find({ author: user }) 
+            .sort({ createdAt: 'desc' }).populate('author', 'username avatar userID');
 
         res.render('users/showProfile', { user, posts });
 

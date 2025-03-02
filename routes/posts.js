@@ -14,7 +14,7 @@ router.get('/new', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('author', 'username avatar userID');
     if (post == null) {
         res.redirect('../')
     } else {
@@ -28,13 +28,11 @@ router.post('/', async (req, res) => {
         return res.status(401).json({ message: "Logged in user not found." });
     }
 
-    // Fetch currently logged in user from the database
-    const user = await User.findById(req.session.authUserId);
 
     const post = new Post({
         title: req.body.title,
         description: req.body.description,
-        author: user.username,
+        author: req.session.authUserId, // Currently logged in user
         createdAt: req.body.createdAt,
         community: req.body.community
     })

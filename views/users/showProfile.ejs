@@ -42,8 +42,8 @@
                 <% posts.forEach(post => { %>
                     <div class="post-item" >
                         <div class="post-author">
-                            <img src="<%=user.avatar%>">
-                            <a href="profile.html"><%=post.author%></a>
+                            <img src="<%=post.author.avatar%>">
+                            <a href="profile.html"><%=post.author.username%></a>
                             <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
                         </div>
                         <a href="/posts/<%= post._id %>" class="post-title">
@@ -58,7 +58,7 @@
                             <div class="post-score">
                                 
                                 <img src="../images/upvote.png" alt="upvote"/>
-                                6
+                                <%= post.score %>
                                 <img src="../images/downvote.png" alt="downvote" />
                             </div>
                             <a href="#" class="post-community">
