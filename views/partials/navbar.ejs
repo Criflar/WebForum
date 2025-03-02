@@ -19,23 +19,23 @@
     </div>
 
     <div class="navbar-right">
-        <% if (!user) { %>
+        <% if (!loggedUser) { %>
         <button id="login-button">Log In</button>
         <% } else { %>
-        <img src="/images/avatars/defaultAvatar.png" class="user-pic" alt="User Picture" onclick="toggleMenu()">
+        <img src="<%= loggedUser.avatar%>" class="user-pic" alt="User Picture" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
             <div class="sub-menu">
                 <div class="user-info">
-                    <img src="/images/avatars/defaultAvatar.png" class="user-pic" alt="User Picture">
-                    <h3><%=user.username %></h3>
+                    <img src="<%= loggedUser.avatar %>" class="user-pic" alt="User Picture">
+                    <h3><%=loggedUser.username %></h3>
                 </div>
                 <hr>
-                <a href="#" class="sub-menu-link">
+                <a href="/users/<%= loggedUser.userID %>" class="sub-menu-link">
                     <img src="/images/profile.png" alt="View Profile">
-                    <p onclick="document.location='profile.html'">View Profile</p>
+                    <p>View Profile</p>
                     <span>></span>
                 </a>
-                <a href="#" class="sub-menu-link">
+                <a href="/users/edit" class="sub-menu-link">
                     <img src="/images/editprofile.png" alt="Edit Profile">
                     <p onclick="document.location='editprofile.html'">Edit Profile</p>
                     <span>></span>
@@ -107,6 +107,11 @@
     </div>
 </header>
 
-<script src="/js/login.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/profile.js"></script>
+<% if (loggedUser) { %>
+    <script src="/js/profile.js"></script>
+<% } else { %>
+    <script src="/js/auth.js"></script>
+    <script src="/js/login.js"></script>
+<% } %>
+
+

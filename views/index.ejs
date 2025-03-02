@@ -28,10 +28,10 @@
                         Newest
                     </a>
                 </div>
-                <% if (user) { %>
+                <% if (loggedUser) { %>
                     <a href="/posts/new" id="create-post-button">Create Post</a>
                 <% } else { %>
-                    <a href="#" id="create-post-button" onclick="showLoginPopup()">Create Post</a>
+                    <a href="#" id="create-post-button" onclick="showLogin()">Create Post</a>
                 <% } %>
                 
             </div>    
@@ -40,7 +40,7 @@
                 <% posts.forEach(post => { %>
                     <div class="post-item" >
                         <div class="post-author">
-                            <img src="../../john.jpg">
+                            <img src="/images/avatars/defaultAvatar.png">
                             <a href="profile.html"><%=post.author%></a>
                             <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
                         </div>
@@ -73,7 +73,6 @@
 
         <%- include('partials/sidebar-right') %>
 
-        <script src="/js/login.js"></script>
     </div>
 </body>
 </html>

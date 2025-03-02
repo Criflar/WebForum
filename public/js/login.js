@@ -4,10 +4,6 @@ document.querySelector("#login-button").addEventListener("click", function () {
     document.querySelector("#login-overlay .popup").classList.add("active");
 });
 
-// Open the Login Popup - CREATE POST
-document.querySelector("#create-post-button").addEventListener("click", function () {
-    showLogin();
-});
 
 // Close the Popup
 document.querySelectorAll(".popup .close-btn").forEach(function (btn) {

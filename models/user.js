@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         type: String, 
         default: '/images/avatars/defaultAvatar.png'
     },
+    description: {
+        type: String,
+        default: "Hello!"
+    },
     userID: {
         type: Number,
         unique: true

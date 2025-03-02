@@ -31,21 +31,22 @@ const User = require('./models/user');
 
 const postRouter = require('./routes/posts.js');
 const authRouter = require('./routes/auth.js');
+const userRouter = require('./routes/users.js');
 
 
 // Middleware to fetch logged in user data for views
 app.use(async (req, res, next) => {
     if (req.session.authUserId) {
-        res.locals.user = await User.findById(req.session.authUserId); 
+        res.locals.loggedUser = await User.findById(req.session.authUserId); 
     } else {
-        res.locals.user = null; // not logged in
+        res.locals.loggedUser = null; // not logged in
     }
     next();
 });
 
 app.set('view engine', 'ejs');
 
-
+// Homepage route
 app.get('/', async (req, res) => {
     const posts = await Post.find().sort({
         createdAt: 'desc' 
@@ -55,5 +56,6 @@ app.get('/', async (req, res) => {
 
 app.use('/posts', postRouter);
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 app.listen(3000);
