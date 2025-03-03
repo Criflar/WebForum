@@ -64,23 +64,18 @@ router.post('/edit', async (req, res) => {
 
 
 router.get('/:userID', async (req, res) => {
-    try {
-        const { userID } = req.params; 
-        const user = await User.findOne({ userID }); // Find user by userID
+    const { userID } = req.params; 
+    const user = await User.findOne({ userID }); // Find user by userID
 
-        if (!user) {
-            return res.redirect('/'); 
-        } 
+    if (!user) {
+        return res.status(404).send("User not found");
+    } 
 
-        const posts = await Post.find({ author: user }) 
-            .sort({ createdAt: 'desc' }).populate('author', 'username avatar userID');
+    const posts = await Post.find({ author: user }) 
+        .sort({ createdAt: 'desc' }).populate('author', 'username avatar userID');
 
-        res.render('users/showProfile', { user, posts });
+    res.render('users/showProfile', { user, posts });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching userID');
-    }
 });
 
 

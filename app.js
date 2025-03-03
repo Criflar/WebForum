@@ -25,10 +25,11 @@ app.use(
     })
 )
 
-
+// Initialize models
 const Post = require('./models/post');
 const User = require('./models/user');
 
+// Initialize routes
 const postRouter = require('./routes/posts.js');
 const authRouter = require('./routes/auth.js');
 const userRouter = require('./routes/users.js');
@@ -50,7 +51,7 @@ app.set('view engine', 'ejs');
 app.get('/', async (req, res) => {
     const posts = await Post.find().sort({
         createdAt: 'desc' 
-    })
+    }).populate('author', 'username avatar userID')
     res.render('index', {posts: posts});
 })
 

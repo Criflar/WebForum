@@ -14,13 +14,18 @@ router.get('/new', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const post = await Post.findById(req.params.id).populate('author', 'username avatar userID');
-    if (post == null) {
-        res.redirect('../')
-    } else {
-        res.render('posts/showPost', {post: post});
+    try {
+        const post = await Post.findById(req.params.id).populate('author', 'username avatar userID');
+
+        if (!post) {
+            return res.redirect('../'); // Post not found, redirect to home
+        }
+
+        res.render('posts/showPost', { post });
+    } catch (error) {
+        console.error("Error fetching post:", error);
+        res.status(500).send("Error fetching post.");
     }
-    
 });
 
 router.post('/', async (req, res) => {

@@ -1,6 +1,4 @@
 const express = require("express");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
 const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
@@ -11,7 +9,8 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
     const {username, password} = req.body;
 
-    try {    
+    
+    try {  
         const existingUser = await User.findOne({ username });
 
         // Check if username exists
@@ -22,13 +21,13 @@ router.post("/register", async (req, res) => {
         const newUser = new User({
             username: username, 
             password: password}); // Create new user document.
+
+       
         await newUser.save();   // Save new user to db.
-
-
         res.status(201).json({ message: "User registered successfully" });
     }catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Error registering user" });
     }
     
     
