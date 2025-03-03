@@ -28,7 +28,7 @@ router.post('/edit', async (req, res) => {
         }
 
         // Set new description if changed
-        if (req.body.description) {
+        if (req.body.description != user.description) {
             user.description = req.body.description;
         }
 
@@ -37,7 +37,7 @@ router.post('/edit', async (req, res) => {
             let avatar = req.files.avatar;
             let uploadPath = path.join(__dirname, '../public/images/avatars/', avatar.name); 
 
-            // Delete the old avatar
+            // Delete the old avatar (excluding default avatar)
             if (user.avatar && !user.avatar.includes('defaultAvatar.png')) {
                 let oldAvatarPath = path.join(__dirname, '../public', user.avatar);
                 
