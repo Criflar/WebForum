@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('../partials/sidebar-left') %>
+
+        <div class="main-content">
+            
+
+            <div class="postform-container">
+
+                <h1>Create Post</h1>
+                <form id="postform" action="/posts" method="POST">
+                    <label for="addpost-community-input">Community</label>
+                    <select name="community" id="addpost-community-input">
+                        <option value="General">General</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Science">Science</option>
+                        <option value="Marketplace">Marketplace</option>
+                    </select>
+                    
+                    <label for="addpost-title-input">Post Title</label>
+                    <input required type="text" id="addpost-title-input" name="title">
+                    
+                    
+                    
+                    <label for="addpost-description-input">Post Description</label>
+                    <textarea required id="addpost-description-input" name="description"></textarea>
+                    
+                    
+                    <button type="submit">Submit Post</button>
+                </form>
+            </div>
+        </div>
+
+        <%- include('../partials/sidebar-right') %>;
+    </div>
+</body>
+</html>

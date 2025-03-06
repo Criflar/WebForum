@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('partials/sidebar-left') %>
+
+        <div class="main-content">
+            <div class="main-content-container-top">
+                <div class="sort-post-buttons">
+                    <a href="#" id="sort-popular-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Popular
+                    </a>
+                    <a href="#" id="sort-newest-button">
+                        <img src="../images/Stars.png" alt="Stars" />
+                        Newest
+                    </a>
+                </div>
+                <% if (loggedUser) { %>
+                    <a href="/posts/new" id="create-post-button">Create Post</a>
+                <% } else { %>
+                    <a href="#" id="create-post-button" onclick="showLogin()">Create Post</a>
+                <% } %>
+                
+            </div>    
+
+            <div class="post-list">
+                <% posts.forEach(post => { %>
+                    <div class="post-item" >
+                        <div class="post-author">
+                            <img src="<%=post.author.avatar%>">
+                            <a href="/users/<%=post.author.userID%>"><%=post.author.username%></a>
+                            <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                        </div>
+                        <a href="/posts/<%= post._id %>" class="post-title">
+                            <h1>
+                                <%=post.title%>
+                            </h1>
+                        </a>                    
+                        <div class="post-desc">
+                            <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                        </div>
+                        <div class="post-item-bottom">
+                            <div class="post-score">
+                                <!--Logged in when voting-->
+                                <% if (loggedUser) { %>
+                                    <!-- Upvote button -->
+                                    <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
+                                        <img src="<%= post.userVote === 1 
+                                        ? '/images/ticked-upvote.png' 
+                                        : '/images/upvote.png' 
+                                        %>" alt="upvote" />
+                                    </a>
+                                    <span id="upvote-<%= post._id %>"><%= post.userVote %></span>
+                                    <!-- Score display -->
+                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                  
+                                    <!-- Downvote button -->
+                                    <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
+                                      <img src="<%= Number(post.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                    </a>
+                                  <% } else { %>
+                                    <!-- For guests: show login prompt -->
+                                    <a href="#" onclick="showLogin(); return false;"><img src="/images/upvote.png" alt="upvote"/></a>
+                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <a href="#" onclick="showLogin(); return false;"><img src="/images/downvote.png" alt="downvote"/></a>
+                                  <% } %>
+                            </div>                              
+                            <a href="#" class="post-community">
+                            <%=post.community%></a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+        <%- include('partials/sidebar-right') %>                
+    </div>
+</body>
+</html>

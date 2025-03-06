@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Stellar Nexus</title>
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('../partials/sidebar-left') %>
+
+        <div class="main-content">
+
+            <div class="edit-profile-container">
+                <h1 style="color: rgb(53, 47, 47)">Edit Profile</h1>
+                <form action="/users/edit" method="POST" enctype="multipart/form-data">
+                  <div class="profile-info">
+                    <label for="avatar" class="edit-img-container">
+                      <img id="avatar-preview" src="<%= loggedUser.avatar %>" alt="Current Avatar">
+                        <i class="fa">&#xf030;</i>                            
+                    </label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*" style="display:none">
+                    <div class="profile-view-name-desc-container">
+                      <h2><%= loggedUser.username %></h2>
+                      <div id="profile-view-desc">
+                        <label for="description">Edit Description</label>
+                        <textarea id="description" name="description"><%= loggedUser.description %></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="button-container">
+                    <button type="submit">Save Changes</button>
+                </div>
+                </form>
+              </div>
+            
+        </div>
+
+        <aside class="right-sidebar"></aside>
+
+    </div>
+
+    <script>
+        document.getElementById("avatar").addEventListener("change", function(event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+                // Check if the file is an image
+                if (!file.type.startsWith("image/")) {
+                    alert("Only image files are allowed!"); 
+                    event.target.value = ""; // Reset file input
+                    return;
+                }
+    
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.getElementById("avatar-preview").src = e.target.result; // Set preview after file input is read
+                };
+
+
+                reader.readAsDataURL(file); // Reads the file input
+            }
+        });
+    </script>
+
+</body>
+</html>
