@@ -16,10 +16,16 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const post = await Post.findById(req.params.id).populate('author', 'username avatar userID');
+        const post = await Post.findById(req.params.id).populate('author', 'username avatar userID').lean();
 
         if (!post) {
             return res.redirect('../'); // Post not found, redirect to home
+        }
+
+        // Check if logged in user voted.
+        if (req.session.authUserId) {
+          const userVote = await Vote.findOne({ user: req.session.authUserId, post: req.params.id });
+          post.userVote = userVote ? userVote.value : 0;
         }
 
         res.render('posts/showPost', { post });
@@ -65,6 +71,7 @@ router.post('/vote', async (req, res) => {
     if (!req.session.authUserId) {
       return res.status(401).json({ error: 'Not authenticated' });
     }
+   
   
     try {
       const post = await Post.findById(postId);
@@ -111,35 +118,6 @@ router.post('/vote', async (req, res) => {
     }
   });
   
-
-
-//gets the saved votes of the user
-// routes/index.js (or similar)
-router.get('/', async (req, res) => {
-  try {
-    let posts = await Post.find().sort({ createdAt: 'desc' }).lean();
-
-    if (req.session.authUserId) {
-      const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
-      const votesByPostId = {};
-      userVotes.forEach(vote => {
-        votesByPostId[vote.post.toString()] = vote.value; // 1 or -1
-      });
-      posts = posts.map(post => ({
-        ...post,
-        userVote: votesByPostId[post._id.toString()] || 0
-      }));
-    } else {
-      posts = posts.map(post => ({ ...post, userVote: 0 }));
-    }
-
-    // Pass loggedUser to the view so the template knows the user is logged in.
-    res.render('index', { posts, loggedUser: req.session.authUserId });
-  } catch (err) {
-    console.error('Error fetching posts:', err);
-    res.status(500).send('Server error');
-  }
-});
 
   
 module.exports = router;

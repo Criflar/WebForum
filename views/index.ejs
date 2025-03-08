@@ -63,9 +63,8 @@
                                         : '/images/upvote.png' 
                                         %>" alt="upvote" />
                                     </a>
-                                    <span id="upvote-<%= post._id %>"><%= post.userVote %></span>
                                     <!-- Score display -->
-                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <span id="score-<%= post._id %>"><%= Number(post.score) %></span>
                                   
                                     <!-- Downvote button -->
                                     <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">

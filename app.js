@@ -50,11 +50,38 @@ app.set('view engine', 'ejs');
 
 // Homepage route
 app.get('/', async (req, res) => {
-    const posts = await Post.find().sort({
-        createdAt: 'desc' 
-    }).populate('author', 'username avatar userID')
-    res.render('index', {posts: posts});
-})
+    try {
+        const posts = await Post.find().sort({ createdAt: 'desc' })
+            .populate('author', 'username avatar userID')
+            .lean(); // Convert Mongoose object to plain js object
+
+        if (req.session.authUserId) {
+            // Get all votes by the logged-in user
+            const userVotes = await Vote.find({ 
+                user: req.session.authUserId, 
+                post: { $in: posts.map(post => post._id) } 
+            });
+
+            // Convert votes into a map: 
+            const voteMap = userVotes.reduce((acc, vote) => {
+                acc[vote.post.toString()] = vote.value;     // vote.post (post._id) -> vote.value (-1 or 1)
+                return acc;
+            }, {});
+
+            // Attach new userVote field to each post that determines if logged in user voted or not.
+            posts.forEach(post => {
+                post.userVote = voteMap[post._id.toString()] || 0; // Default to 0 if no vote
+            });
+        } 
+
+        console.log(posts);
+        res.render('index', { posts: posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server error");
+    }
+});
+
 
 app.use('/posts', postRouter);
 app.use('/auth', authRouter);

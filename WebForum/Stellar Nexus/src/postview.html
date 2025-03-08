@@ -3,71 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <title>Stellar Nexus</title>
 </head>
 <body>
     <!-- Navbar -->
-    <%- include('../partials/navbar') %>
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">
+            <img src="../images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+            </a>
+        </div>
+        
+        <div class="navbar-search">
+            <img src="../images/Telescope.png" alt="Telescope" class="search-icon">
+            <input type="text" placeholder="Time to search the sky!" class="search-input">
+            <select name="communities" id="community-select" class="search-select">
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="tech">Technology</option>
+                <option value="arts">Arts</option>
+                <option value="science">Science</option>
+                <option value="selling">Marketplace</option>
+            </select>
+        </div>
+
+        <div class="navbar-right">
+            <button id="login-button">Log In</button>
+        </div>
+                    <!-- Login Popup -->
+            <div class="overlay" id="login-overlay">
+                <div class="popup">
+                    <div class="close-btn">&times;</div>
+                    <div class="form">
+                        <h2>Log In</h2>
+                        <div class="form-element">
+                            <label for="login-email">Email</label>
+                            <input type="text" class="email" id="login-email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-element">
+                            <label for="login-password">Password</label>
+                            <input type="password" class="password" id="login-password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-element">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Remember me</label>
+                        </div>
+                        <div class="form-element">
+                            <button type="submit" onclick="document.location='postviewlogged.html'">Log In</button>
+                        </div>
+                        <div class="form-element">
+                            <p>New to Stellar Nexus? <a href="#" id="open-signup">Sign Up</a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sign-up Popup -->
+            <div class="overlay" id="signup-overlay">
+                <div class="popup">
+                    <div class="close-btn">&times;</div>
+                    <div class="form">
+                        <h2>Register</h2>
+                        <div class="form-element">
+                            <label for="signup-email">Email</label>
+                            <input type="text" class="email" id="signup-email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-element">
+                            <label for="signup-password">Password</label>
+                            <input type="password" class="password" id="signup-password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-element">
+                            <button type="submit" onclick="document.location='index.html'">Register</button>
+                        </div>
+                        <div class="form-element">
+                            <p>Already a member? <a href="#" id="open-signin">Sign In</a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </header>
 
     <!--Content-->
     <div class="content-wrapper">
-        <%- include('../partials/sidebar-left') %>
+        <aside class="sidebar">
+            <div class="sidebar-card">
+            <h2>Communities</h2>
+            <ul>
+                <li>
+                <img src="../images/General.png" alt="General" />
+                General
+                </li>
+                <li>
+                <img src="../images/Technology.png" alt="Technology" />
+                Technology
+                </li>
+                <li>
+                <img src="../images/Arts.png" alt="Arts" />
+                Arts
+                </li>
+                <li>
+                <img src="../images/Science.png" alt="Science" />
+                Science
+                </li>
+                <li>
+                <img src="../images/Marketplace.png" alt="Marketplace" />
+                Marketplace
+                </li>
+            </ul>
+            </div>
+        </aside>
 
         <div class="main-content">
             <div class="post-container">
                 <div class="highlighted-post">
                     <div class="post-author">
-                        <img src="<%= post.author.avatar %>">
-                        <a href="profile.html"><%=post.author.username%></a>
-                        <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                        <img src="../../john.jpg">
+                        <a href="profile.html">John Pork</a>
+                        <div class="post-time">1 hour ago</div>
                     </div>
                     <a href="#" class="post-title">
                         <h1>
-                            <%=post.title%>
+                            Thoughts on the Switch 2?
                         </h1>
                     </a>                    
                     <div class="post-desc">
-                        <%=post.description%>
+                        Alright, so Nintendo just recently revealed the Switch 2, which has been confirmed
+                        to have significantly better hardware than its predecessor and backwards compatibility.
+                        Personally, I am very hyped about this announcement so far and looking forward to the release.
                     </div>
                     <div class="post-item-bottom">
                         <div class="post-score">
-                            <% if (loggedUser) { %>
-                                <!--can upvote-->
-                                <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
-                                    <img src="<%= post.userVote === 1 
-                                        ? '/images/ticked-upvote.png' 
-                                        : '/images/upvote.png' 
-                                        %>" alt="upvote" />
-                                    </a>
-                                <!--live vote count-->
-                                <span id="score-<%= post._id %>"><%= post.score %></span>
-                                <!--can downvote-->
-                                <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
-                                    <img src="<%= Number(post.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
-                                </a>
-                            <!--Logged Out when voting-->
-                            <% } else { %>
-                                <!--asked to login-->
-                                <a href="#" onclick="showLogin(); return false;">
-                                    <img src="../images/upvote.png" alt="upvote"/></a>
-                                <!--live vote count-->
-                                <span id="score-<%= post._id %>"><%= post.score %></span>
-                                <!--asked to login-->
-                                <a href="#" onclick="showLogin(); return false;">
-                                    <img src="../images/downvote.png" alt="downvote" /></a>
-                            <% } %>
+                            <img src="../images/upvote.png" alt="upvote" id="upvote1"/>
+                            217
+                            <img src="../images/downvote.png" alt="downvote" />
                         </div>
 
                         <div class="post-comment">
-                            <img src="/images/Comments.png" alt="icon">
+                            <img src="../images/Comments.png" alt="icon">
                             <p>Comment</p>
                         </div>
 
                         <a href="#" class="post-community">
-                            <%= post.community %>
+                            Technology
                         </a> 
                     </div>
 
@@ -87,7 +168,7 @@
                     <!--Primary Comments in Post  use class="comment-item" when it is a primary comment-->
                     <div class="comment-item">
                         <div class="post-author">
-                            <img src="/images/Earth Icon.png">
+                            <img src="../images/Earth Icon.png">
                             <a href="profile.html">PixelPioneer</a>
                             <div class="post-time">10 minutes ago</div>
                         </div>
@@ -100,13 +181,13 @@
                             </div>
                             <div class="post-item-bottom">
                                 <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    <img src="../images/upvote.png" alt="upvote"/>
                                     6
-                                    <img src="/images/downvote.png" alt="downvote" />
+                                    <img src="../images/downvote.png" alt="downvote" />
                                 </div>
         
                                 <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
+                                    <img src="../images/Comments.png" alt="icon">
                                     <p>Reply</p>
                                 </div>
                             </div>    
@@ -115,7 +196,7 @@
                         <!--Secondary Comments in Post (Replies in css file) use class="reply-item" when it is a secondary comment-->
                         <div class="reply2-item">
                             <div class="post-author">
-                                <img src="/images/Earth Icon.png">
+                                <img src="../images/Earth Icon.png">
                                 <a href="profile.html">GameByteX</a>
                                 <div class="post-time">8 minutes ago</div>
                             </div>
@@ -129,13 +210,13 @@
                                 </div>
                                 <div class="post-item-bottom">
                                     <div class="comment-score">
-                                        <img src="/images/upvote.png" alt="upvote"/>
+                                        <img src="../images/upvote.png" alt="upvote"/>
                                         4
-                                        <img src="/images/downvote.png" alt="downvote" />
+                                        <img src="../images/downvote.png" alt="downvote" />
                                     </div>
             
                                     <div class="comment-item-pic">
-                                        <img src="/images/Comments.png" alt="icon">
+                                        <img src="../images/Comments.png" alt="icon">
                                         <p>Reply</p>
                                     </div>
                                 </div>
@@ -143,7 +224,7 @@
                             
                             <div class="reply-item">
                                 <div class="post-author">
-                                    <img src="/images/Earth Icon.png">
+                                    <img src="../images/Earth Icon.png">
                                     <a href="profile.html">JoyConnoisseur</a>
                                     <div class="post-time">2 minutes ago</div>
                                 </div>
@@ -156,13 +237,13 @@
                                     </div>
                                     <div class="post-item-bottom">
                                         <div class="comment-score">
-                                            <img src="/images/upvote.png" alt="upvote"/>
+                                            <img src="../images/upvote.png" alt="upvote"/>
                                             -1
-                                            <img src="/images/downvote.png" alt="downvote" id="downvote1"/>
+                                            <img src="../images/downvote.png" alt="downvote" id="downvote1"/>
                                         </div>
                 
                                         <div class="comment-item-pic">
-                                            <img src="/images/Comments.png" alt="icon">
+                                            <img src="../images/Comments.png" alt="icon">
                                             <p>Reply</p>
                                         </div>
                                     </div>
@@ -174,7 +255,7 @@
                     <!--User 2-->
                     <div class="comment-item">
                         <div class="post-author">
-                            <img src="/images/Earth Icon.png">
+                            <img src="../images/Earth Icon.png">
                             <a href="profile.html">LevelUpLad</a>
                             <div class="post-time">56 minutes ago</div>
                         </div>
@@ -186,13 +267,13 @@
                             </div>
                             <div class="post-item-bottom">
                                 <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    <img src="../images/upvote.png" alt="upvote"/>
                                     4
-                                    <img src="/images/downvote.png" alt="downvote" />
+                                    <img src="../images/downvote.png" alt="downvote" />
                                 </div>
         
                                 <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
+                                    <img src="../images/Comments.png" alt="icon">
                                     <p>Reply</p>
                                 </div>
                             </div>    
@@ -215,13 +296,13 @@
                             </div>
                             <div class="post-item-bottom">
                                 <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
+                                    <img src="../images/upvote.png" alt="upvote"/>
                                     4
-                                    <img src="/images/downvote.png" alt="downvote" />
+                                    <img src="../images/downvote.png" alt="downvote" />
                                 </div>
         
                                 <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
+                                    <img src="../images/Comments.png" alt="icon">
                                     <p>Reply</p>
                                 </div>
                             </div>    
@@ -235,9 +316,37 @@
             </div>
         </div>
 
-        <%- include('../partials/sidebar-right') %>
+        <aside class="right-sidebar">
+            <!-- Home Card -->
+            <div class="card home-card">
+                <div class="card-image-wrapper">
+                    <img src="../images/Home Image.png" alt="Home Image" class="card-image">
+                </div>
+                <div class="card-content">
+                    <div class="card-heading">
+                        <img src="../images/Technology.png" alt="Technology Icon" class="heading-icon">
+                        <h2>Tech</h2>
+                    </div>
+                    <p>Welcome to the Technology sector of our constellation-themed forum. Explore the latest innovations, 
+                        share your knowledge, and connect with others shaping the future of tech.</p>
+                </div> 
+            </div>
+          
+            <!-- Contact Us Card -->
+            <div class="card contact-card">
+              <h2>Contact Us!</h2>
+              <p>For any concerns with the forum, please send an email to the developers:</p>
+              <div class="contact-list-wrapper">
+                <ul>
+                    <li>Marvin Ivan Mangubat<br>marvin_mangubat@dlsu.edu.ph</li>
+                    <li>Radny Intino<br>radny_intino@dlsu.edu.ph</li>
+                    <li>Russell Emmanuel Galan<br>russell_galan@dlsu.edu.ph</li>
+                </ul>
+            </div>
+            </div>
+          </aside>
 
     </div>
-    
+    <script src="postviewlogin.js"></script>
 </body>
 </html>
