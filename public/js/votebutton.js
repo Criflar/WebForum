@@ -44,6 +44,12 @@ function toggleUpvote(postId) {
       upvoteEl.classList.add('active-vote');
       upvoteImg.src = '/images/ticked-upvote.png';
       downvoteImg.src = '/images/downvote.png';
+
+      // If a downvote was active, remove it
+      if (downvoteEl.classList.contains('active-vote')) {
+          downvoteEl.classList.remove('active-vote');
+          downvoteImg.src = '/images/downvote.png';
+      }
   }
 
   // Fetch the correct score from the backend
@@ -70,6 +76,12 @@ function toggleDownvote(postId) {
       downvoteEl.classList.add('active-vote');
       downvoteImg.src = '/images/ticked-downvote.png';
       upvoteImg.src = '/images/upvote.png';
+
+      // If an upvote was active, remove it
+      if (upvoteEl.classList.contains('active-vote')) {
+          upvoteEl.classList.remove('active-vote');
+          upvoteImg.src = '/images/upvote.png';
+      }
   }
 
   // Fetch the correct score from the backend
