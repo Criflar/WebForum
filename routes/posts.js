@@ -65,7 +65,6 @@ router.post('/vote', async (req, res) => {
     if (!req.session.authUserId) {
       return res.status(401).json({ error: 'Not authenticated' });
     }
-   
   
     try {
       const post = await Post.findById(postId);
