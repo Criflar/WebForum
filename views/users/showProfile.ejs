@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('../partials/sidebar-left') %>
+
+        <div class="main-content">
+
+            <div class="profile-info">
+                <img src="<%= user.avatar %>">
+                <div class="profile-view-name-desc-container">
+                    <div id="profile-view-name">
+                        <%= user.username %>
+                    </div>
+                    <div id="profile-view-desc">
+                        <br><br>
+                        <p>
+                            <%= user.description %>                 
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-button-container">
+                <button>Overview</button>
+                <button>Posts</button>
+                <button>Comments</button>
+            </div>
+            <div class="post-list">
+                <% posts.forEach(post => { %>
+                    <div class="post-item" >
+                        <div class="post-author">
+                            <img src="<%=post.author.avatar%>">
+                            <a href="profile.html"><%=post.author.username%></a>
+                            <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
+                        </div>
+                        <a href="/posts/<%= post._id %>" class="post-title">
+                            <h1>
+                                <%=post.title%>
+                            </h1>
+                        </a>                    
+                        <div class="post-desc">
+                            <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                        </div>
+                        <div class="post-item-bottom">
+                            <div class="post-score">
+                                <!--Logged in when voting-->
+                                <% if (loggedUser) { %>
+                                    <!--can upvote-->
+                                    <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
+                                        <img src="../images/upvote.png" alt="upvote" /></a>
+                                    <!--live vote count-->
+                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <!--can downvote-->
+                                    <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
+                                        <img src="../images/downvote.png" alt="downvote" /> </a>
+                                <!--Logged Out when voting-->
+                                <% } else { %>
+                                    <!--asked to login-->
+                                    <a href="#" onclick="showLogin(); return false;">
+                                        <img src="../images/upvote.png" alt="upvote"/></a>
+                                    <!--live vote count-->
+                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <!--asked to login-->
+                                    <a href="#" onclick="showLogin(); return false;">
+                                        <img src="../images/downvote.png" alt="downvote" /></a>
+                                <% } %>
+                            </div>                  
+                            <a href="#" class="post-community">
+                                <%=post.community%>
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+
+            </div>
+        </div>
+
+
+        <aside class="right-sidebar"> </aside>
+    </div>
+
+</body>
+</html>
