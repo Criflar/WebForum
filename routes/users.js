@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const Post = require('./../models/post');
 const User = require('./../models/user');
+const Vote = require('./../models/vote');
 const router = express.Router();
 
 router.use(fileUpload());
@@ -70,10 +71,30 @@ router.get('/:userID', async (req, res) => {
     if (!user) {
         return res.status(404).send("User not found");
     } 
+    
 
     const posts = await Post.find({ author: user }) 
         .sort({ createdAt: 'desc' }).populate('author', 'username avatar userID');
 
+    // If user is logged in, search for voted posts
+    if (req.session.authUserId) {
+        // Get all votes by the logged-in user
+        const userVotes = await Vote.find({ 
+            user: req.session.authUserId, 
+            post: { $in: posts.map(post => post._id) } 
+        });
+
+        // Convert votes into a map: 
+        const voteMap = userVotes.reduce((acc, vote) => {
+            acc[vote.post.toString()] = vote.value;     // vote.post (post._id) -> vote.value (-1 or 1)
+            return acc;
+        }, {});
+
+        // Attach new userVote field to each post that determines if logged in user voted or not.
+        posts.forEach(post => {
+            post.userVote = voteMap[post._id.toString()] || 0; // Default to 0 if no vote
+        });
+    } 
     res.render('users/showProfile', { user, posts });
 
 });

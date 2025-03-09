@@ -21,7 +21,7 @@
                 <div class="highlighted-post">
                     <div class="post-author">
                         <img src="<%= post.author.avatar %>">
-                        <a href="profile.html"><%=post.author.username%></a>
+                        <a href="/users/<%=post.author.userID%>"><%=post.author.username%></a>
                         <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
                     </div>
                     <a href="#" class="post-title">

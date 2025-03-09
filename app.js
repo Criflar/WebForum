@@ -51,31 +51,48 @@ app.set('view engine', 'ejs');
 // Homepage route
 app.get('/', async (req, res) => {
     try {
-        const posts = await Post.find().sort({ createdAt: 'desc' })
-            .populate('author', 'username avatar userID')
-            .lean(); // Convert Mongoose object to plain js object
+            const page = parseInt(req.query.page) || 1;     // Get current page from URL, default to 1 if not found
+            const pageLimit = 15;
+            const skip = (page - 1) * pageLimit;
+          
+            // Count the total number of posts to calculate total pages
+            const totalPosts = await Post.countDocuments();
+         
+        
+            const posts = await Post.find()
+            .sort({ createdAt: 'desc' }) 
+            .skip(skip) // Skips a number of posts when fetching
+            .limit(pageLimit)   // Limit the number of posts fetched
+            .populate('author', 'username avatar userID')   // Include other fields to author object
+            .lean(); // Convert Mongoose objects to plain JS objects
 
-        if (req.session.authUserId) {
-            // Get all votes by the logged-in user
-            const userVotes = await Vote.find({ 
-                user: req.session.authUserId, 
-                post: { $in: posts.map(post => post._id) } 
+
+            // If user is logged in, search for voted posts
+            if (req.session.authUserId) {
+                // Get all votes by the logged-in user
+                const userVotes = await Vote.find({ 
+                    user: req.session.authUserId, 
+                    post: { $in: posts.map(post => post._id) } 
+                });
+
+                // Convert votes into a map: 
+                const voteMap = userVotes.reduce((acc, vote) => {
+                    acc[vote.post.toString()] = vote.value;     // vote.post (post._id) -> vote.value (-1 or 1)
+                    return acc;
+                }, {});
+
+                // Attach new userVote field to each post that determines if logged in user voted or not.
+                posts.forEach(post => {
+                    post.userVote = voteMap[post._id.toString()] || 0; // Default to 0 if no vote
+                });
+            } 
+
+            res.render('index', { 
+                posts, 
+                currentPage: page, 
+                totalPages: Math.ceil(totalPosts / pageLimit), 
             });
 
-            // Convert votes into a map: 
-            const voteMap = userVotes.reduce((acc, vote) => {
-                acc[vote.post.toString()] = vote.value;     // vote.post (post._id) -> vote.value (-1 or 1)
-                return acc;
-            }, {});
-
-            // Attach new userVote field to each post that determines if logged in user voted or not.
-            posts.forEach(post => {
-                post.userVote = voteMap[post._id.toString()] || 0; // Default to 0 if no vote
-            });
-        } 
-
-        console.log(posts);
-        res.render('index', { posts: posts });
     } catch (error) {
         console.error(error);
         res.status(500).send("Server error");
