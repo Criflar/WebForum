@@ -21,7 +21,7 @@
                 <div class="highlighted-post">
                     <div class="post-author">
                         <img src="<%= post.author.avatar %>">
-                        <a href="profile.html"><%=post.author.username%></a>
+                        <a href="/users/<%=post.author.userID%>"><%=post.author.username%></a>
                         <div class="post-time"><%=post.createdAt.toLocaleDateString()%></div>
                     </div>
                     <a href="#" class="post-title">
@@ -37,12 +37,17 @@
                             <% if (loggedUser) { %>
                                 <!--can upvote-->
                                 <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
-                                    <img src="../images/upvote.png" alt="upvote" /></a>
+                                    <img src="<%= post.userVote === 1 
+                                        ? '/images/ticked-upvote.png' 
+                                        : '/images/upvote.png' 
+                                        %>" alt="upvote" />
+                                    </a>
                                 <!--live vote count-->
                                 <span id="score-<%= post._id %>"><%= post.score %></span>
                                 <!--can downvote-->
                                 <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
-                                    <img src="../images/downvote.png" alt="downvote" /> </a>
+                                    <img src="<%= Number(post.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                </a>
                             <!--Logged Out when voting-->
                             <% } else { %>
                                 <!--asked to login-->
