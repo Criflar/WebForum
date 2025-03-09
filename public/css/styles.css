@@ -1213,3 +1213,30 @@ height: 12px;
   filter: brightness(0) saturate(100%) invert(7%) sepia(59%) saturate(3979%) hue-rotate(238deg) brightness(88%) contrast(104%);
 }
 
+
+/* PAGINATION */
+
+.pagination {
+  display: flex;
+  gap: 10px;
+
+}
+.pagination a {
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  font-size: 1em;
+  height: 2em;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.pagination span {
+  text-decoration: none;
+  color: yellow;
+  background-color: #710482;
+  font-size: 1em;
+  height: 2em;
+  padding: 5px;
+  border-radius: 5px;
+}

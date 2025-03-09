@@ -19,14 +19,14 @@
         <div class="main-content">
             <div class="main-content-container-top">
                 <div class="sort-post-buttons">
-                    <a href="#" id="sort-popular-button">
+                    <a href="/posts?sort=popular" id="sort-popular-button">
                         <img src="../images/Stars.png" alt="Stars" />
                         Popular
                     </a>
-                    <a href="#" id="sort-newest-button">
+                    <a href="/posts?sort=newest" id="sort-newest-button">
                         <img src="../images/Stars.png" alt="Stars" />
                         Newest
-                    </a>
+                    </a>                    
                 </div>
                 <% if (loggedUser) { %>
                     <a href="/posts/new" id="create-post-button">Create Post</a>
@@ -63,9 +63,8 @@
                                         : '/images/upvote.png' 
                                         %>" alt="upvote" />
                                     </a>
-                                    <span id="upvote-<%= post._id %>"><%= post.userVote %></span>
                                     <!-- Score display -->
-                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <span id="score-<%= post._id %>"><%= Number(post.score) %></span>
                                   
                                     <!-- Downvote button -->
                                     <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
@@ -83,8 +82,27 @@
                         </div>
                     </div>
                 <% }) %>
+
+                <div class="pagination">
+                    <% if(currentPage > 1) { %>
+                      <a href="?page=<%= currentPage - 1 %>&sort=<%= sort %>" class="page-nav-button">Previous</a>
+                    <% } %>
+                    
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                      <% if(i === currentPage) { %>
+                        <span id="current-page"><%= i %></span>
+                      <% } else { %>
+                        <a href="?page=<%= i %>&sort=<%= sort %>"><%= i %></a>
+                      <% } %>
+                    <% } %>
+                    
+                    <% if(currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>&sort=<%= sort %>" class="page-nav-button">Next</a>
+                    <% } %>
+                  </div>                   
             </div>
         </div>
+
         <%- include('partials/sidebar-right') %>                
     </div>
 </body>
