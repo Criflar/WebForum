@@ -1,0 +1,118 @@
+<header class="navbar">
+    <div class="navbar-left">
+        <a href="/">
+            <img src="/images/Stellar Nexus Logo.png" alt="Stellar Nexus Logo">
+        </a>
+    </div>
+    
+    <div class="navbar-search">
+        <img src="/images/Telescope.png" alt="Telescope" class="search-icon">
+        <input type="text" placeholder="Time to search the sky!" class="search-input">
+        <select name="communities" id="community-select" class="search-select">
+            <option value="all">All</option>
+            <option value="general">General</option>
+            <option value="tech">Technology</option>
+            <option value="arts">Arts</option>
+            <option value="science">Science</option>
+            <option value="selling">Marketplace</option>
+        </select>
+    </div>
+
+    <div class="navbar-right">
+        <% if (!loggedUser) { %>
+        <button id="login-button">Log In</button>
+        <% } else { %>
+        <img src="<%= loggedUser.avatar%>" class="user-pic" alt="User Picture" onclick="toggleMenu()">
+        <div class="sub-menu-wrap" id="subMenu">
+            <div class="sub-menu">
+                <div class="user-info">
+                    <img src="<%= loggedUser.avatar %>" class="user-pic" alt="User Picture">
+                    <h3><%=loggedUser.username %></h3>
+                </div>
+                <hr>
+                <a href="/users/<%= loggedUser.userID %>" class="sub-menu-link">
+                    <img src="/images/profile.png" alt="View Profile">
+                    <p>View Profile</p>
+                    <span>></span>
+                </a>
+                <a href="/users/edit" class="sub-menu-link">
+                    <img src="/images/editprofile.png" alt="Edit Profile">
+                    <p onclick="document.location='editprofile.html'">Edit Profile</p>
+                    <span>></span>
+                </a>
+                <a href="/auth/logout" class="sub-menu-link">
+                    <img src="/images/logout.png" alt="Log Out">
+                    <p>Log Out</p>
+                    <span>></span>
+                </a>
+
+            </div>
+        </div>         
+        <% } %>
+    </div>
+
+    <!-- Login Popup -->
+    <div class="overlay" id="login-overlay">
+        <div class="popup">
+            <div class="close-btn">&times;</div>
+            <form id="login-form" class="form" method="POST" action="/auth/login"> 
+                <h2>Log In</h2>
+                <div class="form-element">
+                    <label for="login-username">Username</label>
+                    <input type="text" name="username" id="login-username" placeholder="Enter Username" required>
+                </div>
+                <div class="form-element">
+                    <label for="login-password">Password</label>
+                    <input type="password" name="password" id="login-password" placeholder="Enter Password" required>
+                </div>
+                <div class="form-element">
+                    <input type="checkbox" name="rememberMe" id="remember-me">
+                    <label for="remember-me">Remember me</label>
+                </div>
+                <div class="form-element">
+                    <button type="submit">Log In</button>  
+                </div>
+                <div class="form-element">
+                    <p>New to Stellar Nexus? <a href="#" id="open-signup">Sign Up</a></p>
+                </div>
+            </form>
+            <div  id="login-message" style="margin-top: -3px;"></div>
+        </div>
+    </div>
+
+    <!-- Sign-up Popup -->
+    <div class="overlay" id="signup-overlay">
+        <div class="popup">
+            <div class="close-btn">&times;</div>
+            <form id="signup-form" class="form" method="POST" action="/auth/register">
+                <h2>Register</h2>
+                <div class="form-element">
+                    <label for="signup-username">Username</label>
+                    <input type="text" name="username" id="signup-username" placeholder="Enter Username" required>
+                </div>
+                <div class="form-element">
+                    <label for="signup-password">Password</label>
+                    <input type="password" name="password" id="signup-password" placeholder="Enter Password" required>
+                </div>
+                <div class="form-element">
+                    <button type="submit" id="signup-button">Register</button>
+                </div>
+                <div class="form-element">
+                    <p>Already a member? <a href="#" id="open-signin">Sign In</a></p>
+                </div>
+            </form>
+            <div  id="signup-message" style="margin-top: -3px;">
+            </div>
+        </div>
+    </div>
+</header>
+
+<% if (loggedUser) { %>
+    <script src="/js/profile.js"></script>
+    <script src="/js/votebutton.js"></script>
+<% } else { %>
+    <script src="/js/auth.js"></script>
+    <script src="/js/login.js"></script>
+<% } %>
+
+
