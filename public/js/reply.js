@@ -5,10 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".reply-btn").forEach(button => {
         button.addEventListener("click", (e) => {
             const commentId = e.currentTarget.getAttribute("data-comment-id");
-            console.log("Clicked Reply Button, Comment ID:", commentId); // Debugging
             const commentDiv = document.getElementById(`comment-${commentId}`);
 
-            console.log(commentId);
             // Move the reply form right under the clicked comment
             commentDiv.appendChild(replyForm);
             replyForm.classList.remove("hidden");

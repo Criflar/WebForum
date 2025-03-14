@@ -37,58 +37,59 @@ router.post('/', async (req, res) => {
 
 
 router.post('/vote', async (req, res) => {
-    const { postId, vote } = req.body; // vote is expected to be 1 or -1
+    const { commentId, vote } = req.body; // vote is expected to be 1 or -1
   
     // Only allow logged-in users to vote.
     if (!req.session.authUserId) {
-      return res.status(401).json({ error: 'Not authenticated' });
+        return res.status(401).json({ error: 'Not authenticated' });
     }
-   
   
     try {
-      const comment = await Comment.findById(postId);
-      if (!post) return res.status(404).json({ error: 'Post not found' });
-  
-      // Check for an existing vote by this user on this post.
-      const existingVote = await Vote.findOne({ user: req.session.authUserId, post: postId });
-      let netDelta = 0;
-  
-      if (!existingVote && vote !== null) {
-        // Create a new vote if none exists.
-        const newVote = new Vote({
-          user: req.session.authUserId,
-          post: postId,
-          value: vote
-        });
-        await newVote.save();
-        netDelta = vote;
+        const comment = await Comment.findById(commentId);
+        if (!comment) return res.status(404).json({ error: 'Comment not found' });
 
-      } else {
-        if (vote === null) {
-          // Same vote exists: undo the vote.
-          netDelta = -existingVote.value;   // Value to be added to score (reverse value of undoed vote).
-          await Vote.deleteOne({ _id: existingVote._id });  // Delete the existing vote.
-        } else if (existingVote.value !== vote) {
-          // Switch vote direction.
-          netDelta = 2 * vote;
-          await Vote.updateOne({ _id: existingVote._id }, { value: vote });
+        // Check for an existing vote by this user on this comment.
+        const existingVote = await Vote.findOne({ user: req.session.authUserId, comment: commentId });
+        let netDelta = 0;
+
+        if (!existingVote && vote !== null) {
+            // Create a new vote if none exists.
+            const newVote = new Vote({
+                user: req.session.authUserId,
+                comment: commentId,
+                value: vote
+            });
+            await newVote.save();
+            netDelta = vote;
+
+        } else {
+            if (vote === null) {
+                // Undo the vote (delete it).
+                netDelta = -existingVote.value; // Reverse value of undone vote
+                await Vote.deleteOne({ _id: existingVote._id }); // Remove the vote
+            } else if (existingVote.value !== vote) {
+                // Change vote direction
+                netDelta = 2 * vote;
+                await Vote.updateOne({ _id: existingVote._id }, { value: vote });
+            }
         }
-      }
-  
-      // Update the post's score permanently.
-      if (netDelta !== 0)  await Post.updateOne({ _id: postId }, { $inc: { score: netDelta } });
-  
 
-       // Fetch updated post to get the correct score
-       const updatedPost = await Post.findById(postId);
+        // Update the comment's score
+        if (netDelta !== 0) {
+            await Comment.updateOne({ _id: commentId }, { $inc: { score: netDelta } });
+        }
 
-       res.json({ newScore: updatedPost.score }); // Send new score as json for fetch api
+        // Fetch updated comment to get the correct score
+        const updatedComment = await Comment.findById(commentId);
+
+        res.json({ newScore: updatedComment.score }); // Send new score for frontend updates
 
     } catch (err) {
-      console.error('Error updating vote:', err);
-      res.status(500).json({ error: 'Server error' });
+        console.error('Error updating vote:', err);
+        res.status(500).json({ error: 'Server error' });
     }
-  });
+});
+
 
 
   

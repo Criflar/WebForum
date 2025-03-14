@@ -1,120 +1,99 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   console.log("DOM fully loaded. Initializing vote buttons.");
 
-  // Select all vote buttons.
-  const voteButtons = document.querySelectorAll('.vote-btn');
-  voteButtons.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Logged-in users: Proceed with vote toggle.
-      const postId = btn.getAttribute('data-post');
-      const voteType = btn.getAttribute('data-vote'); // "up" or "down"
-      
-      if (voteType === 'up') {
-        toggleUpvote(postId);
-      } else if (voteType === 'down') {
-        toggleDownvote(postId);
-      }
-    });
+  document.querySelectorAll('.vote-btn, .vote-btn-comment').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          const isPost = btn.classList.contains('vote-btn');  // Vote is either for post or comment
+          const id = btn.getAttribute(isPost ? 'data-post' : 'data-comment');
+          const voteType = btn.getAttribute('data-vote'); // "up" or "down"
+
+          if (voteType === 'up') {
+              toggleUpvote(id, isPost);
+          } else if (voteType === 'down') {
+              toggleDownvote(id, isPost);
+          }
+      });
   });
 });
 
-  // ------------------------
-  // Functions for Voting
-  // ------------------------
 
-// Manages UI elements when upvoting. (Toggle vote buttons, etc.)
-function toggleUpvote(postId) {
-  const upvoteEl = document.getElementById('upvote-' + postId);
-  const downvoteEl = document.getElementById('downvote-' + postId);
-
+// Changes upvote button and updates score
+function toggleUpvote(id, isPost) {
+  const upvoteEl = document.getElementById('upvote-' + id);
+  const downvoteEl = document.getElementById('downvote-' + id);
   const upvoteImg = upvoteEl.querySelector('img');
   const downvoteImg = downvoteEl.querySelector('img');
 
-  let voteValue = 1;  // Default to upvote
+  let voteValue = 1;
 
   if (upvoteEl.classList.contains('active-vote')) {
-      // Undo upvote
       upvoteEl.classList.remove('active-vote');
       upvoteImg.src = '/images/upvote.png';
-      voteValue = null;  // null value = delete vote
+      voteValue = null;
   } else {
-      // Apply upvote
       upvoteEl.classList.add('active-vote');
       upvoteImg.src = '/images/ticked-upvote.png';
       downvoteImg.src = '/images/downvote.png';
 
-      // If a downvote was active, remove it
       if (downvoteEl.classList.contains('active-vote')) {
           downvoteEl.classList.remove('active-vote');
           downvoteImg.src = '/images/downvote.png';
       }
   }
 
-  // Fetch the correct score from the backend
-  updateScore(postId, voteValue);
+  updateScore(id, voteValue, isPost);
 }
 
-// Manages UI elements when downvoting. (Toggle vote buttons, etc.)
-function toggleDownvote(postId) {
-  const upvoteEl = document.getElementById('upvote-' + postId);
-  const downvoteEl = document.getElementById('downvote-' + postId);
-
+// Changes downvote button and updates score
+function toggleDownvote(id, isPost) {
+  const upvoteEl = document.getElementById('upvote-' + id);
+  const downvoteEl = document.getElementById('downvote-' + id);
   const upvoteImg = upvoteEl.querySelector('img');
   const downvoteImg = downvoteEl.querySelector('img');
 
-  let voteValue = -1;  // Default to downvote
+  let voteValue = -1;
 
   if (downvoteEl.classList.contains('active-vote')) {
-      // Undo downvote
       downvoteEl.classList.remove('active-vote');
       downvoteImg.src = '/images/downvote.png';
-      voteValue = null;  // null value = delete vote
+      voteValue = null;
   } else {
-      // Apply downvote
       downvoteEl.classList.add('active-vote');
       downvoteImg.src = '/images/ticked-downvote.png';
       upvoteImg.src = '/images/upvote.png';
 
-      // If an upvote was active, remove it
       if (upvoteEl.classList.contains('active-vote')) {
           upvoteEl.classList.remove('active-vote');
           upvoteImg.src = '/images/upvote.png';
       }
   }
 
-  // Fetch the correct score from the backend
-  updateScore(postId, voteValue);
+  updateScore(id, voteValue, isPost);
 }
 
 
-// ------------------------
-// Update Score Function
-// ------------------------
+// Updates the score via fetch
+function updateScore(id, voteValue, isPost) {
+  const scoreEl = document.getElementById('score-' + id);
+  const url = isPost ? '/posts/vote' : '/comments/vote';
 
-// This function updates the score in the server, then updates it in the UI.
-function updateScore(postId, voteValue) {
-  const scoreEl = document.getElementById('score-' + postId);
-  
-  console.log("Updating score for post", postId);
+  console.log(`Updating score for ${isPost ? "post" : "comment"}:`, id);
 
-
-  // Send vote change to the server.
-  fetch('/posts/vote', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ postId: postId, vote: voteValue })
+  fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ [isPost ? 'postId' : 'commentId']: id, vote: voteValue })
   })
   .then(response => response.json())
   .then(data => {
-    console.log("Server response for post", postId, ":", data);
-    
-    if (data.newScore !== undefined) {
-      scoreEl.textContent = data.newScore;  // Update the UI from the server
-    }
+      console.log(`Server response for ${isPost ? "post" : "comment"}:`, data);
+      if (data.newScore !== undefined) {
+          scoreEl.textContent = data.newScore;
+      }
   })
   .catch(error => {
-    console.error("Error updating vote for post", postId, ":", error);
+      console.error(`Error updating vote for ${isPost ? "post" : "comment"}:`, error);
   });
 }

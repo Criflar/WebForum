@@ -75,6 +75,7 @@ app.locals.timeAgo = function (date) {
 
 app.set('view engine', 'ejs');
 
+// HOMEPAGE ROUTE
 app.get('/', async (req, res) => {
     try {
       // Get the current page number from the query (default to page 1)
@@ -105,7 +106,7 @@ app.get('/', async (req, res) => {
   
       // Attach userVote to each post if user is logged in
       if (req.session.authUserId) {
-        const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+        const userVotes = await Vote.find({ user: req.session.authUserId, post: { $ne: null } }).lean();
         const votesByPostId = {};
         userVotes.forEach(vote => {
           votesByPostId[vote.post.toString()] = vote.value;
@@ -131,7 +132,7 @@ app.get('/', async (req, res) => {
       });
     } catch (err) {
       console.error('Error fetching posts:', err);
-      res.status(500).send('Server error');
+      res.status(500).send('Error rendering index');
     }
 });
 

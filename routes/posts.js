@@ -169,7 +169,7 @@ router.get('/c/:community/posts', async (req, res) => {
           
               // Attach userVote to each post if user is logged in
               if (req.session.authUserId) {
-                const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+                const userVotes = await Vote.find({ user: req.session.authUserId, post: { $ne: null }  }).lean();
                 const votesByPostId = {};
                 userVotes.forEach(vote => {
                   votesByPostId[vote.post.toString()] = vote.value;
@@ -205,22 +205,37 @@ router.get('/c/:community/posts/:id', async (req, res) => {
         const {community, id} = req.params;
         const post = await Post.findById(id).populate('author', 'username avatar userID').lean();
 
-        if (!post || community !== post.community) {
-            return res.redirect('/'); // Post not found, redirect to home
-        }
-
-        // Check if logged in user voted.
-        if (req.session.authUserId) {
-          const userVote = await Vote.findOne({ user: req.session.authUserId, post: req.params.id });
-          post.userVote = userVote ? userVote.value : 0;
-        }
-
         // Fetch comments for this post 
         const comments = await Comment.find({ post: id }) // Fetch comments related to the post
             .populate('author', 'username avatar') // Get author details
             .sort({ createdAt: 1 }) // Sort by creation time 
             .lean();
 
+        if (!post || community !== post.community) {
+            return res.redirect('/'); // Post not found, redirect to home
+        }
+
+        // Check if logged in user voted.
+        if (req.session.authUserId) {
+          const postUserVote = await Vote.findOne({ user: req.session.authUserId, post: req.params.id });
+          post.userVote = postUserVote ? postUserVote.value : 0;
+
+          const commentUserVotes = await Vote.find({ user: req.session.authUserId, comment: { $in: comments.map(c => c._id)  } }).lean();
+          const votesByCommentId = {};
+          commentUserVotes.forEach(vote => {
+            votesByCommentId[vote.comment.toString()] = vote.value;
+          });
+          comments.forEach(comment => {
+            comment.userVote = votesByCommentId[comment._id.toString()] || 0;
+          });
+        } else {
+          comments.forEach(comment => {
+            comment.userVote = 0;
+          });
+        }
+
+
+        
         res.render('posts/showPost', { post, community, comments });
     } catch (error) {
         console.error("Error fetching post:", error);
