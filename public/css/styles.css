@@ -10,7 +10,16 @@
     
 }
 
+.hidden {
+  display: none;
+}
 
+
+
+/* FILL THIS FOR REPLY BOX*/
+.reply-active {
+  display: flex;
+}
 html, body {
     margin: 0;
     padding: 0;
@@ -1158,7 +1167,6 @@ height: 12px;
   flex-flow: column nowrap;
   padding: 15px;
   border-radius: 15px;
-  margin-bottom:5px;
 }
 
 .comment-desc {
@@ -1218,22 +1226,14 @@ height: 12px;
   cursor:pointer;
 }
 
-.reply-item{ 
-  margin-left: 10px;
-  width: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  padding: 15px;
-  border-radius: 15px;
-  margin-bottom:-15px;
-}
 
 .reply2-item{  
   margin-left: 20px;
+  margin-bottom: 0px;
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-  padding: 15px;
+  padding: 0;
   border-radius: 15px;
   margin-bottom:-15px;
 }

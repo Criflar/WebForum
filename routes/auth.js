@@ -29,8 +29,7 @@ router.post("/register", async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Error registering user" });
     }
-    
-    
+        
 });
 
 router.post("/login", async (req, res) => {

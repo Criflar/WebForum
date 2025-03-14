@@ -2,6 +2,7 @@ const express = require('express');
 const Post = require('./../models/post');
 const Vote = require('../models/vote');
 const User = require('./../models/user');
+const Comment = require('./../models/comment');
 const router = express.Router();
 
 const communities = ['General', 'Technology', 'Arts', 'Science', 'Marketplace'];
@@ -38,7 +39,7 @@ router.post('/posts', async (req, res) => {
         console.log(e);
         res.render('posts/newPost');
     }
-    
+
 });
 
 // Route to handle rendering of form for editing post
@@ -214,7 +215,13 @@ router.get('/c/:community/posts/:id', async (req, res) => {
           post.userVote = userVote ? userVote.value : 0;
         }
 
-        res.render('posts/showPost', { post, community });
+        // Fetch comments for this post 
+        const comments = await Comment.find({ post: id }) // Fetch comments related to the post
+            .populate('author', 'username avatar') // Get author details
+            .sort({ createdAt: 1 }) // Sort by creation time 
+            .lean();
+
+        res.render('posts/showPost', { post, community, comments });
     } catch (error) {
         console.error("Error fetching post:", error);
         res.status(500).send("Error fetching post.");

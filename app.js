@@ -29,11 +29,13 @@ app.use(
 const Post = require('./models/post');
 const User = require('./models/user');
 const Vote = require('./models/vote');
+const Comment = require('./models/comment');
 
 // Initialize routes
 const postRouter = require('./routes/posts.js');
 const authRouter = require('./routes/auth.js');
 const userRouter = require('./routes/users.js');
+const commentRouter = require('./routes/comments.js');
 
 
 // Middleware to fetch logged in user data for views
@@ -137,5 +139,6 @@ app.get('/', async (req, res) => {
 app.use(postRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/comments', commentRouter);
 
 app.listen(3000);
