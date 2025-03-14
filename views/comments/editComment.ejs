@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!--Content-->
+    <div class="content-wrapper">
+        <%- include('../partials/sidebar-left') %>
+
+        <div class="main-content">
+            <div class="postform-container">
+
+                <h1>Edit Comment</h1>
+                
+                <form id="postform" action="/comments/<%= comment._id %>/edit" method="POST">
+                    
+
+                    <label for="addpost-description-input">Edit Your Comment</label>
+                    <textarea required id="addpost-description-input" name="comment"><%= comment.body %></textarea>
+                    
+                    <button type="submit">Save Changes</button>
+                </form>
+
+            </div>
+        </div>
+
+        <aside class="right-sidebar"></aside>
+    </div>
+</body>
+</html>

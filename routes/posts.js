@@ -2,6 +2,7 @@ const express = require('express');
 const Post = require('./../models/post');
 const Vote = require('../models/vote');
 const User = require('./../models/user');
+const Comment = require('./../models/comment');
 const router = express.Router();
 
 const communities = ['General', 'Technology', 'Arts', 'Science', 'Marketplace'];
@@ -38,7 +39,7 @@ router.post('/posts', async (req, res) => {
         console.log(e);
         res.render('posts/newPost');
     }
-    
+
 });
 
 // Route to handle rendering of form for editing post
@@ -168,7 +169,7 @@ router.get('/c/:community/posts', async (req, res) => {
           
               // Attach userVote to each post if user is logged in
               if (req.session.authUserId) {
-                const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+                const userVotes = await Vote.find({ user: req.session.authUserId, post: { $ne: null }  }).lean();
                 const votesByPostId = {};
                 userVotes.forEach(vote => {
                   votesByPostId[vote.post.toString()] = vote.value;
@@ -204,17 +205,38 @@ router.get('/c/:community/posts/:id', async (req, res) => {
         const {community, id} = req.params;
         const post = await Post.findById(id).populate('author', 'username avatar userID').lean();
 
+        // Fetch comments for this post 
+        const comments = await Comment.find({ post: id }) // Fetch comments related to the post
+            .populate('author', 'username avatar userID') // Get author details
+            .sort({ createdAt: 1 }) // Sort by creation time 
+            .lean();
+
         if (!post || community !== post.community) {
             return res.redirect('/'); // Post not found, redirect to home
         }
 
         // Check if logged in user voted.
         if (req.session.authUserId) {
-          const userVote = await Vote.findOne({ user: req.session.authUserId, post: req.params.id });
-          post.userVote = userVote ? userVote.value : 0;
+          const postUserVote = await Vote.findOne({ user: req.session.authUserId, post: req.params.id });
+          post.userVote = postUserVote ? postUserVote.value : 0;
+
+          const commentUserVotes = await Vote.find({ user: req.session.authUserId, comment: { $in: comments.map(c => c._id)  } }).lean();
+          const votesByCommentId = {};
+          commentUserVotes.forEach(vote => {
+            votesByCommentId[vote.comment.toString()] = vote.value;
+          });
+          comments.forEach(comment => {
+            comment.userVote = votesByCommentId[comment._id.toString()] || 0;
+          });
+        } else {
+          comments.forEach(comment => {
+            comment.userVote = 0;
+          });
         }
 
-        res.render('posts/showPost', { post, community });
+
+        
+        res.render('posts/showPost', { post, community, comments });
     } catch (error) {
         console.error("Error fetching post:", error);
         res.status(500).send("Error fetching post.");
@@ -222,7 +244,67 @@ router.get('/c/:community/posts/:id', async (req, res) => {
 });
 
 
+// Search bar
+router.get('/search', async (req, res) => {
+  const searchTerm = req.query.query?.trim();
+  const communityFilter = req.query.community; // Get the community filter from the query
 
+  console.log("Received search term:", searchTerm); // Log query to confirm
+  console.log("Community filter:", communityFilter); // Log community filter to confirm
+
+  if (!searchTerm) {
+    return res.render("search", { query: "", results: [], error: "Search term required", community: null });
+  }
+
+  try {
+    // Base query for searching by title, description, or community
+    const searchQuery = {
+      $or: [
+        { title: { $regex: searchTerm, $options: "i" } }, // Search by title
+        { description: { $regex: searchTerm, $options: "i" } }, // Search by description
+        { community: { $regex: searchTerm, $options: "i" } } // Search by community
+      ]
+    };
+
+    // Add community filter if provided
+    if (communityFilter) {
+      searchQuery.community = communityFilter; // Filter by the selected community
+    }
+
+    // Fetch posts matching the search query
+    const results = await Post.find(searchQuery)
+      .select("title description author community createdAt score") // Include required fields
+      .populate('author', 'username avatar userID') // Populate author details
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .lean();
+
+    // Fetch the user's votes if logged in
+    if (req.session.authUserId) {
+      const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+      const votesByPostId = {};
+      userVotes.forEach(vote => {
+        votesByPostId[vote.post.toString()] = vote.value; // Map post ID to vote value
+      });
+
+      // Attach userVote to each post
+      results.forEach(post => {
+        post.userVote = votesByPostId[post._id.toString()] || 0; // Default to 0 if no vote
+      });
+    } else {
+      // If user is not logged in, set userVote to 0 for all posts
+      results.forEach(post => {
+        post.userVote = 0;
+      });
+    }
+
+    console.log("Search results:", results); // Log results to confirm they are fetched correctly
+
+    res.render("search", { query: searchTerm, results, error: null, community: communityFilter });
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).render("search", { query: searchTerm, results: [], error: "Internal Server Error", community: communityFilter });
+  }
+});
 
 // POST /posts/vote
 // Expects JSON: { postId: String, vote: Number }
