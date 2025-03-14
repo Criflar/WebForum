@@ -39,54 +39,189 @@
                 <button>Comments</button>
             </div>
             <div class="post-list">
-                <% posts.forEach(post => { %>
+                <% items.forEach(item => { %>
+                    <% if (item.title) {%>
                     <div class="post-item" >
                         <div class="post-author">
-                            <img src="<%=post.author.avatar%>">
-                            <a href="/users/<%=post.author.userID%>"><%=post.author.username%></a>
-                            <div class="post-time"><%=timeAgo(post.createdAt)%></div>
+                            <img src="<%=item.author.avatar%>">
+                            <a href="/users/<%=item.author.userID%>"><%=item.author.username%></a>
+                            <div class="post-time"><%=timeAgo(item.createdAt)%></div>
                         </div>
-                        <a href="/c/<%= post.community %>/posts/<%= post._id %>" class="post-title">
+                        <a href="/c/<%= item.community %>/posts/<%= item._id %>" class="post-title">
                             <h1>
-                                <%=post.title%>
+                                <%=item.title%>
                             </h1>
                         </a>                    
                         <div class="post-desc">
-                            <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                            <%= item.description.length > 250 ? item.description.slice(0, 250) + "..." : item.description %>
                         </div>
                         <div class="post-item-bottom">
                             <div class="post-score">
                                 <!--Logged in when voting-->
                                 <% if (loggedUser) { %>
                                     <!-- Upvote button -->
-                                    <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
-                                        <img src="<%= post.userVote === 1 
+                                    <a href="#" id="upvote-<%= item._id %>" class="vote-btn" data-post="<%= item._id %>" data-vote="up">
+                                        <img src="<%= item.userVote === 1 
                                         ? '/images/ticked-upvote.png' 
                                         : '/images/upvote.png' 
                                         %>" alt="upvote" />
                                     </a>
                                     <!-- Score display -->
-                                    <span id="score-<%= post._id %>"><%= Number(post.score) %></span>
+                                    <span id="score-<%= item._id %>"><%= Number(item.score) %></span>
                                   
                                     <!-- Downvote button -->
-                                    <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
-                                      <img src="<%= Number(post.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                    <a href="#" id="downvote-<%= item._id %>" class="vote-btn" data-post="<%= item._id %>" data-vote="down">
+                                      <img src="<%= Number(item.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
                                     </a>
                                   <% } else { %>
                                     <!-- For guests: show login prompt -->
                                     <a href="#" onclick="showLogin(); return false;"><img src="/images/upvote.png" alt="upvote"/></a>
-                                    <span id="score-<%= post._id %>"><%= post.score %></span>
+                                    <span id="score-<%= item._id %>"><%= item.score %></span>
                                     <a href="#" onclick="showLogin(); return false;"><img src="/images/downvote.png" alt="downvote"/></a>
                                   <% } %>
                             </div>                              
-                            <a href="/c/<%= post.community %>" class="post-community">
-                            <%=post.community%></a>
+                            <a href="/c/<%= item.community %>" class="post-community">
+                            <%=item.community%></a>
 
                         </div>
                     </div>
+                    <% } else if (!item.title && !item.parent) { %>
+                        <div class="profile-view-comment-item">
+                            <div class="profile-view-comment-item-post-title-container">
+                                <div class="profile-view-comment-item-post-title">
+                                <a href="/c/<%= item.post.community %>/posts/<%= item.post._id %>" class="post-title">
+                                <%= item.post.title %>
+                                </a>
+                                </div>
+                                <a href="/c/<%=item.post.community%>" class="post-community">
+                                    <%= item.post.community %>
+                                </a>
+                            </div>
+                            
+                            <div class="profile-view-comment-author">
+                                <img src="<%=item.author.avatar %>">
+                                <%=item.author.username %>
+                                <div class="post-time"><%=timeAgo(item.createdAt)%></div>
+                            </div>
+        
+                            <div class="profile-view-comment-body">
+                                <%= item.body.length > 250 ? item.body.slice(0, 250) + "..." : item.body %>
+                            </div>
+        
+                            <div class="post-item-bottom">
+                                <div class="comment-score">
+                                    <img src="/images/upvote.png" alt="upvote"/>
+                                        <% if (loggedUser) { %>
+                                            <!--can upvote-->
+                                            <a href="#" id="upvote-<%= item._id %>" class="vote-btn-comment" data-comment="<%= item._id %>" data-vote="up">
+                                                <img src="<%= item.userVote === 1 
+                                                    ? '/images/ticked-upvote.png' 
+                                                    : '/images/upvote.png' 
+                                                    %>" alt="upvote" />
+                                                </a>
+                                            <!--live vote count-->
+                                            <span id="score-<%= item._id %>"><%= item.score %></span>
+                                            <!--can downvote-->
+                                            <a href="#" id="downvote-<%= item._id %>" class="vote-btn-comment" data-comment="<%= item._id %>" data-vote="down">
+                                                <img src="<%= Number(item.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                            </a>
+                                        <!--Logged Out when voting-->
+                                        <% } else { %>
+                                            <!--asked to login-->
+                                            <a href="#" onclick="showLogin(); return false;">
+                                                <img src="/images/upvote.png" alt="upvote"/></a>
+                                            <!--live vote count-->
+                                            <span id="score-<%= item._id %>"><%= item.score %></span>
+                                            <!--asked to login-->
+                                            <a href="#" onclick="showLogin(); return false;">
+                                                <img src="/images/downvote.png" alt="downvote" /></a>
+                                        <% } %>
+                                    <img src="/images/downvote.png" alt="downvote"/>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else if (item.parent) { %>
+                        <div class="profile-view-comment-item">
+                            <div class="profile-view-comment-item-post-title-container">
+                                <div class="profile-view-comment-item-post-title">
+                                    <a href="/c/<%= item.post.community %>/posts/<%= item.post._id %>" class="post-title">
+                                        <%= item.post.title %>
+                                    </a>
+                                </div>
+                                <a href="/c/<%=item.post.community%>" class="post-community">
+                                    <%= item.post.community %>
+                                </a>
+                            </div>
+                            
+                            <div class="profile-view-comment-author">
+                                <img src="<%=item.author.avatar %>">
+                                <%=item.author.username %> replied to <%=item.parent.author.username%>
+                                <div class="post-time"><%=timeAgo(item.createdAt)%></div>
+                            </div>
+        
+                            <div class="profile-view-comment-body">
+                                <%= item.body.length > 250 ? item.body.slice(0, 250) + "..." : item.body %>
+                            </div>
+        
+                            <div class="post-item-bottom">
+                                <div class="comment-score">
+                                    <img src="/images/upvote.png" alt="upvote"/>
+                                        <% if (loggedUser) { %>
+                                            <!--can upvote-->
+                                            <a href="#" id="upvote-<%= item._id %>" class="vote-btn-comment" data-comment="<%= item._id %>" data-vote="up">
+                                                <img src="<%= item.userVote === 1 
+                                                    ? '/images/ticked-upvote.png' 
+                                                    : '/images/upvote.png' 
+                                                    %>" alt="upvote" />
+                                                </a>
+                                            <!--live vote count-->
+                                            <span id="score-<%= item._id %>"><%= item.score %></span>
+                                            <!--can downvote-->
+                                            <a href="#" id="downvote-<%= item._id %>" class="vote-btn-comment" data-comment="<%= item._id %>" data-vote="down">
+                                                <img src="<%= Number(item.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                            </a>
+                                        <!--Logged Out when voting-->
+                                        <% } else { %>
+                                            <!--asked to login-->
+                                            <a href="#" onclick="showLogin(); return false;">
+                                                <img src="/images/upvote.png" alt="upvote"/></a>
+                                            <!--live vote count-->
+                                            <span id="score-<%= item._id %>"><%= item.score %></span>
+                                            <!--asked to login-->
+                                            <a href="#" onclick="showLogin(); return false;">
+                                                <img src="/images/downvote.png" alt="downvote" /></a>
+                                        <% } %>
+                                    <img src="/images/downvote.png" alt="downvote"/>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
                 <% }) %>
 
+
+                <div class="pagination">
+                    <% if(currentPage > 1) { %>
+                      <a href="?page=<%= currentPage - 1 %>" class="page-nav-button">Previous</a>
+                    <% } %>
+                    
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                      <% if(i === currentPage) { %>
+                        <span id="current-page"><%= i %></span>
+                      <% } else { %>
+                        <a href="?page=<%= i %>"><%= i %></a>
+                      <% } %>
+                    <% } %>
+                    
+                    <% if(currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>" class="page-nav-button">Next</a>
+                    <% } %>
+                  </div>   
+
+                  
             </div>
+
+            
         </div>
 
 

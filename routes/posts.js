@@ -207,7 +207,7 @@ router.get('/c/:community/posts/:id', async (req, res) => {
 
         // Fetch comments for this post 
         const comments = await Comment.find({ post: id }) // Fetch comments related to the post
-            .populate('author', 'username avatar') // Get author details
+            .populate('author', 'username avatar userID') // Get author details
             .sort({ createdAt: 1 }) // Sort by creation time 
             .lean();
 

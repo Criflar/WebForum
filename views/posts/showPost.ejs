@@ -112,7 +112,7 @@
                             <div class="comment-item" id="comment-<%= comment._id %>">
                                 <div class="post-author">
                                     <img src="<%= comment.author.avatar %>">
-                                    <a href="profile.html"><%= comment.author.username %></a>
+                                    <a href="/users/<%=comment.author.userID%>"><%= comment.author.username %></a>
                                     <div class="post-time"><%= timeAgo(comment.createdAt) %></div>
                                 </div>
                                 <div class="comment-spacing">
