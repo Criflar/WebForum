@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <title>Stellar Nexus - Search Results</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+        <%- include('partials/sidebar-left') %>
+
+        <div class="main-content">
+            <!-- Search Results Header -->
+            <div class="search-results-header">
+                <h2>Search Results for "<%= query %>"</h2>
+                <% if (community) { %>
+                    <p>Filtered by community: <strong><%= community %></strong></p>
+                <% } %>
+                <% if (error) { %>
+                    <p class="error-message"><%= error %></p>
+                <% } else if (results.length === 0) { %>
+                    <p class="no-results-message">No results found. Try a different search term.</p>
+                <% } %>
+            </div>
+
+            <!-- Post List -->
+            <div class="post-list">
+                <% results.forEach(post => { %>
+                  <div class="post-item">
+                    <div class="post-author">
+                      <img src="<%= post.author.avatar || '/images/default-avatar.png' %>" alt="User Avatar">
+                      <a href="/users/<%= post.author.userID %>"><%= post.author.username %></a>
+                      <div class="post-time"><%= timeAgo(post.createdAt) %></div>
+                    </div>
+                    
+                    <a href="/c/<%= post.community %>/posts/<%= post._id %>" class="post-title">
+                      <h1><%= post.title %></h1>
+                    </a>
+              
+                    <div class="post-desc">
+                      <% if (post.description) { %>
+                        <%= post.description.length > 250 ? post.description.slice(0, 250) + "..." : post.description %>
+                      <% } else { %>
+                        <em>No description available</em>
+                      <% } %>
+                    </div>
+              
+                    <div class="post-item-bottom">
+                      <div class="post-score">
+                        <!--Logged in when voting-->
+                        <% if (loggedUser) { %>
+                          <!-- Upvote button -->
+                          <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
+                            <img src="<%= post.userVote === 1 
+                              ? '/images/TickedUpvote.png' 
+                              : '/images/Upvote.png' 
+                            %>" alt="upvote" />
+                          </a>
+                          <!-- Score display -->
+                          <span id="score-<%= post._id %>"><%= Number(post.score) %></span>
+                          <!-- Downvote button -->
+                          <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
+                            <img src="<%= post.userVote === -1 
+                              ? '/images/Ticked-Downvote.png' 
+                              : '/images/Downvote.png' 
+                            %>" alt="downvote" />
+                          </a>
+                        <% } else { %>
+                          <!-- For guests: show login prompt -->
+                          <a href="#" onclick="showLogin(); return false;"><img src="/images/Upvote.png" alt="upvote"/></a>
+                          <span id="score-<%= post._id %>"><%= post.score %></span>
+                          <a href="#" onclick="showLogin(); return false;"><img src="/images/Downvote.png" alt="downvote"/></a>
+                        <% } %>
+                      </div>  
+                      <% if (post.community) { %>
+                        <a href="/c/<%= post.community %>" class="post-community">
+                          <%= post.community %>
+                        </a>
+                      <% } %>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+        </div>
+
+        <%- include('partials/sidebar-right') %>                
+    </div>
+</body>
+</html>

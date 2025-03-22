@@ -17,7 +17,7 @@
         <%- include('../partials/sidebar-left') %>
 
         <div class="main-content">
-            <div class="post-container">
+            <div class="post-container" data-post-id="<%=post._id%>">
                 <div class="highlighted-post">
                     <div class="post-author">
                         <img src="<%= post.author.avatar %>">
@@ -43,33 +43,29 @@
                                 <!--can upvote-->
                                 <a href="#" id="upvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="up">
                                     <img src="<%= post.userVote === 1 
-                                        ? '/images/ticked-upvote.png' 
-                                        : '/images/upvote.png' 
+                                        ? '/images/TickedUpvote.png' 
+                                        : '/images/Upvote.png' 
                                         %>" alt="upvote" />
                                     </a>
                                 <!--live vote count-->
                                 <span id="score-<%= post._id %>"><%= post.score %></span>
                                 <!--can downvote-->
                                 <a href="#" id="downvote-<%= post._id %>" class="vote-btn" data-post="<%= post._id %>" data-vote="down">
-                                    <img src="<%= Number(post.userVote) === -1 ? '/images/ticked-downvote.png' : '/images/downvote.png' %>" alt="downvote" />
+                                    <img src="<%= Number(post.userVote) === -1 ? '/images/TickedDownvote.png' : '/images/Downvote.png' %>" alt="downvote" />
                                 </a>
                             <!--Logged Out when voting-->
                             <% } else { %>
                                 <!--asked to login-->
                                 <a href="#" onclick="showLogin(); return false;">
-                                    <img src="/images/upvote.png" alt="upvote"/></a>
+                                    <img src="/images/Upvote.png" alt="upvote"/></a>
                                 <!--live vote count-->
                                 <span id="score-<%= post._id %>"><%= post.score %></span>
                                 <!--asked to login-->
                                 <a href="#" onclick="showLogin(); return false;">
-                                    <img src="/images/downvote.png" alt="downvote" /></a>
+                                    <img src="/images/Downvote.png" alt="downvote" /></a>
                             <% } %>
                         </div>
 
-                        <div class="post-comment">
-                            <img src="/images/Comments.png" alt="icon">
-                            <p>Comment</p>
-                        </div>
 
                         <a href="/c/<%=post.community%>" class="post-community">
                             <%= post.community %>
@@ -89,164 +85,115 @@
                         <% } %>
                     </div>
 
-                    <div class="comment-box">
-                        <input type="text" placeholder="Add a comment">
-                    </div>
+                    <% if (loggedUser) {%>
+                    <form method="POST" action="/comments">
+                        <input type="hidden" name="post" value="<%=post._id%>">
+                        <textarea class="comment-box" name="comment" placeholder="Add a comment"></textarea>
+                        <button type="submit" id ="submit">Submit</button>
+                    </form>
+                    <% } %>
 
-                    <div class="sort-comments">
+                    <!-- <div class="sort-comments">
                         <span>Sort by:
                         <select class="sort-comments-select">
                             <option value="Best">Best</option>
                             <option value="Recent">Recent</option>
                         </select></span> 
-                    </div>
+                    </div> -->
 
 
                     <!--Primary Comments in Post  use class="comment-item" when it is a primary comment-->
-                    <div class="comment-item">
-                        <div class="post-author">
-                            <img src="/images/Earth Icon.png">
-                            <a href="profile.html">PixelPioneer</a>
-                            <div class="post-time">10 minutes ago</div>
-                        </div>
-                        <div class="comment-spacing">
-                            <a href="index.html" class="post-title"> </a>                    
-                            <div class="comment-desc">
-                                The Nintendo Switch 2 is rumored to bring upgraded hardware, improved display, 
-                                and enhanced performance while maintaining its hybrid functionality. If true, 
-                                it could redefine portable gaming once again! 
-                            </div>
-                            <div class="post-item-bottom">
-                                <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
-                                    6
-                                    <img src="/images/downvote.png" alt="downvote" />
-                                </div>
-        
-                                <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
-                                    <p>Reply</p>
-                                </div>
-                            </div>    
-                        </div>
-
-                        <!--Secondary Comments in Post (Replies in css file) use class="reply-item" when it is a secondary comment-->
-                        <div class="reply2-item">
-                            <div class="post-author">
-                                <img src="/images/Earth Icon.png">
-                                <a href="profile.html">GameByteX</a>
-                                <div class="post-time">8 minutes ago</div>
-                            </div>
-                            <div class="comment-spacing">
-                                <a href="index.html" class="post-title"> </a>                    
-                                <div class="comment-desc">
-                                    If the rumors are true, that’s going to be a game-changer! 
-                                    I just hope Nintendo balances power with battery life—no one 
-                                    wants a handheld that dies too fast. Also, backward compatibility would be a huge win. 
-                                    Can’t wait to see if they officially announce it soon! 
-                                </div>
-                                <div class="post-item-bottom">
-                                    <div class="comment-score">
-                                        <img src="/images/upvote.png" alt="upvote"/>
-                                        4
-                                        <img src="/images/downvote.png" alt="downvote" />
-                                    </div>
-            
-                                    <div class="comment-item-pic">
-                                        <img src="/images/Comments.png" alt="icon">
-                                        <p>Reply</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="reply-item">
+                    <% function renderComments(comments, parentId) { %>
+                        <% comments.forEach(comment => { %>
+                            <% if (parentId === null && !comment.parent) {%>
+                            <div class="comment-container">
+                            <% } %>
+                            <% if ((parentId === null && !comment.parent) || (comment.parent && parentId && comment.parent.toString() === parentId.toString())){ %>
+                            <div class="comment-item" id="comment-<%= comment._id %>">
                                 <div class="post-author">
-                                    <img src="/images/Earth Icon.png">
-                                    <a href="profile.html">JoyConnoisseur</a>
-                                    <div class="post-time">2 minutes ago</div>
+                                    <img src="<%= comment.author.avatar %>">
+                                    <a href="/users/<%=comment.author.userID%>"><%= comment.author.username %></a>
+                                    <div class="post-time"><%= timeAgo(comment.createdAt) %></div>
                                 </div>
                                 <div class="comment-spacing">
-                                    <a href="index.html" class="post-title"> </a>                    
                                     <div class="comment-desc">
-                                        Agreed! A more powerful Switch sounds amazing, but battery life and backward 
-                                        compatibility are key. If they nail both, plus improve the Joy-Cons to prevent 
-                                        drift issues, this could be the ultimate upgrade!
+                                        <% if (comment.commentEdited ) { %>
+                                            <div style="color: #7b7b7b">(Edited)</div>
+                                            <%  } %>
+                                    <%= comment.body %>
+                                    
+
                                     </div>
                                     <div class="post-item-bottom">
-                                        <div class="comment-score">
-                                            <img src="/images/upvote.png" alt="upvote"/>
-                                            -1
-                                            <img src="/images/downvote.png" alt="downvote" id="downvote1"/>
-                                        </div>
-                
-                                        <div class="comment-item-pic">
+                                    <div class="comment-score">
+                                      
+                                            <% if (loggedUser) { %>
+                                                <!--can upvote-->
+                                                <a href="#" id="upvote-<%= comment._id %>" class="vote-btn-comment" data-comment="<%= comment._id %>" data-vote="up">
+                                                    <img src="<%= comment.userVote === 1 
+                                                        ? '/images/TickedUpvote.png' 
+                                                        : '/images/Upvote.png' 
+                                                        %>" alt="upvote" />
+                                                    </a>
+                                                <!--live vote count-->
+                                                <span id="score-<%= comment._id %>"><%= comment.score %></span>
+                                                <!--can downvote-->
+                                                <a href="#" id="downvote-<%= comment._id %>" class="vote-btn-comment" data-comment="<%= comment._id %>" data-vote="down">
+                                                    <img src="<%= Number(comment.userVote) === -1 ? '/images/TickedDownvote.png' : '/images/Downvote.png' %>" alt="downvote" />
+                                                </a>
+                                            <!--Logged Out when voting-->
+                                            <% } else { %>
+                                                <!--asked to login-->
+                                                <a href="#" onclick="showLogin(); return false;">
+                                                    <img src="/images/upvote.png" alt="upvote"/></a>
+                                                <!--live vote count-->
+                                                <span id="score-<%= comment._id %>"><%= comment.score %></span>
+                                                <!--asked to login-->
+                                                <a href="#" onclick="showLogin(); return false;">
+                                                    <img src="/images/downvote.png" alt="downvote" /></a>
+                                            <% } %>
+                                     
+                                    </div>
+
+                                    <% if (loggedUser) {%>
+                                        <div class="reply-btn" data-comment-id="<%= comment._id %>">
+                                            <div class="comment-item-pic">
                                             <img src="/images/Comments.png" alt="icon">
                                             <p>Reply</p>
+                                            </div>
                                         </div>
+                                    <% } %>
+                                    <% if (loggedUser) if (comment.author.userID === loggedUser.userID) { %>
+                                        <div class="more-settings">
+                                            <img src="/images/More Settings.png" alt="more-settings">
+                                            <div class="more-settings-dropdown">
+                                                <a href="/comments/<%=comment._id%>/edit">Edit</a>
+                                                <form action="/comments/<%= comment._id %>/delete" method="POST" >
+                                                    <button type="submit">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    <% } %>
                                     </div>
-                                </div>    
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!--User 2-->
-                    <div class="comment-item">
-                        <div class="post-author">
-                            <img src="/images/Earth Icon.png">
-                            <a href="profile.html">LevelUpLad</a>
-                            <div class="post-time">56 minutes ago</div>
-                        </div>
-                        <div class="comment-spacing">
-                            <a href="index.html" class="post-title"> </a>                    
-                            <div class="comment-desc">
-                                I’m really hoping for OLED as the standard and maybe a higher refresh rate. 
-                                A smoother experience would make a huge difference, especially for fast-paced games! 
-                            </div>
-                            <div class="post-item-bottom">
-                                <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
-                                    4
-                                    <img src="/images/downvote.png" alt="downvote" />
                                 </div>
-        
-                                <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
-                                    <p>Reply</p>
-                                </div>
-                            </div>    
-                        </div>
-                    </div>
-                    
-                    <!-- User 3 -->
-                    <div class="comment-item">
-                        <div class="post-author">
-                            <img src="../../john.jpg">
-                            <a href="profile.html">John Pork</a>
-                            <div class="post-time">34 minutes ago</div>
-                        </div>
-                        <div class="comment-spacing">
-                            <a href="index.html" class="post-title"> </a>                    
-                            <div class="comment-desc">
-                                Nintendo always does its own thing, so I wouldn’t be surprised if they focus more on 
-                                innovation than pure specs. But if we get DLSS support, that could be a massive leap for 
-                                handheld visuals! 
-                            </div>
-                            <div class="post-item-bottom">
-                                <div class="comment-score">
-                                    <img src="/images/upvote.png" alt="upvote"/>
-                                    4
-                                    <img src="/images/downvote.png" alt="downvote" />
-                                </div>
-        
-                                <div class="comment-item-pic">
-                                    <img src="/images/Comments.png" alt="icon">
-                                    <p>Reply</p>
-                                </div>
-                            </div>    
-                        </div>
-                    </div>
 
-
+                                
+                                <!-- Container for nested replies -->
+                                <div class="reply2-item">
+                                    <% renderComments(comments, comment._id); %>
+                                </div>
+                            </div>
+                           <% } %>
+                           
+                           <% if (parentId === null && !comment.parent) {%>
+                           </div>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+                                
+                    <!-- Render All Comments (Call the Recursive Function) -->
+                    <% renderComments(comments, null); %>
+                    
                 </div>
 
 
@@ -256,6 +203,17 @@
         <%- include('../partials/sidebar-right') %>
 
     </div>
+
+    <!-- Reply Form (Hidden by Default) -->
+    <form id="replyForm" class="hidden" method="POST" action="/comments">
+        <input type="hidden" name="post" value="<%=post._id%>">
+        <input type="hidden" name="parent" id="parentId">
+        <textarea name="comment" placeholder="Write your reply"></textarea>
+        <button type="submit">Submit Reply</button>
+    </form>
     
+    <script src="/js/reply.js"></script>
 </body>
+
+
 </html>

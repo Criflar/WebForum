@@ -5,6 +5,7 @@ const fs = require('fs');
 const Post = require('./../models/post');
 const User = require('./../models/user');
 const Vote = require('./../models/vote');
+const Comment = require('./../models/comment');
 const router = express.Router();
 
 router.use(fileUpload());
@@ -65,39 +66,75 @@ router.post('/edit', async (req, res) => {
 
 
 router.get('/:userID', async (req, res) => {
-    const { userID } = req.params; 
-    const user = await User.findOne({ userID }); // Find user by userID
+    try {
+        const { userID } = req.params; 
+        const user = await User.findOne({ userID }); // Find user by userID
 
-    if (!user) {
-        return res.status(404).send("User not found");
-    } 
-    
+        if (!user) {
+            return res.status(404).send("User not found");
+        } 
 
-    const posts = await Post.find({ author: user }) 
-        .sort({ createdAt: 'desc' }).populate('author', 'username avatar userID');
+        // Get current page number and items per page
+        const currentPage = parseInt(req.query.page) || 1;
+        const perPage = 5; // Adjust as needed
 
-    // If user is logged in, search for voted posts
-    if (req.session.authUserId) {
-        // Get all votes by the logged-in user
-        const userVotes = await Vote.find({ 
-            user: req.session.authUserId, 
-            post: { $in: posts.map(post => post._id) } 
+        // Fetch all posts and comments 
+        const posts = await Post.find({ author: user }) 
+            .sort({ createdAt: -1 })
+            .populate('author', 'username avatar userID')
+            .lean();
+
+        const comments = await Comment.find({ author: user }) 
+            .populate('author', 'username avatar')
+            .populate('post', 'title _id community')
+            .populate({
+                path: 'parent',
+                populate: { path: 'author', select: 'username' }
+            })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        // Merge and sort all items by creation date
+        let items = [...posts, ...comments];
+        items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+
+        // Count total items 
+        const totalItems = items.length;
+        const totalPages = Math.ceil(totalItems / perPage);
+
+        // Apply pagination
+        items = items.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+        // If user is logged in, fetch their votes
+        if (req.session.authUserId) {
+            const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+            const votesByItemId = {};
+            userVotes.forEach(vote => {
+                if (vote.post) votesByItemId[vote.post.toString()] = vote.value;
+                if (vote.comment) votesByItemId[vote.comment.toString()] = vote.value;
+            });
+            items.forEach(item => {
+                item.userVote = votesByItemId[item._id.toString()] || 0;
+            });
+        } else {
+            items.forEach(item => {
+                item.userVote = 0;
+            });
+        }
+
+        res.render('users/showProfile', { 
+            user, 
+            items, 
+            currentPage, 
+            totalPages 
         });
 
-        // Convert votes into a map: 
-        const voteMap = userVotes.reduce((acc, vote) => {
-            acc[vote.post.toString()] = vote.value;     // vote.post (post._id) -> vote.value (-1 or 1)
-            return acc;
-        }, {});
-
-        // Attach new userVote field to each post that determines if logged in user voted or not.
-        posts.forEach(post => {
-            post.userVote = voteMap[post._id.toString()] || 0; // Default to 0 if no vote
-        });
-    } 
-    res.render('users/showProfile', { user, posts });
-
+    } catch (err) {
+        console.error('Error fetching user data:', err);
+        res.status(500).send('Error loading user profile');
+    }
 });
+
 
 
 

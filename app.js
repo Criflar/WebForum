@@ -3,12 +3,37 @@ const mongoose = require('mongoose');
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 
-
 const app = express();
 
+// Initialize models
+const Post = require('./models/post');
+const User = require('./models/user');
+const Vote = require('./models/vote');
+const Comment = require('./models/comment');
+
+// Initialize routes
+const postRouter = require('./routes/posts.js');
+const authRouter = require('./routes/auth.js');
+const userRouter = require('./routes/users.js');
+const commentRouter = require('./routes/comments.js');
+const searchRouter = require('./routes/search.js');
+
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/forum')
-.then(() => console.log("Connected to MongoDB"))
+mongoose.connect('mongodb+srv://StellarNexus:StellarNexus@cluster0.3piwb.mongodb.net/forum?retryWrites=true&w=majority&appName=Cluster0')
+.then(() => {
+  console.log("Connected to MongoDB");
+
+  // Place route definitions and middleware here
+  app.use(postRouter);
+  app.use('/auth', authRouter);
+  app.use('/users', userRouter);
+  app.use('/comments', commentRouter);
+  app.use('/search', searchRouter);
+
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
+  });
+})
 .catch(err => console.error("Failed to connect to MongoDB"));
 
 
@@ -24,16 +49,6 @@ app.use(
         saveUninitialized: false,
     })
 )
-
-// Initialize models
-const Post = require('./models/post');
-const User = require('./models/user');
-const Vote = require('./models/vote');
-
-// Initialize routes
-const postRouter = require('./routes/posts.js');
-const authRouter = require('./routes/auth.js');
-const userRouter = require('./routes/users.js');
 
 
 // Middleware to fetch logged in user data for views
@@ -73,6 +88,7 @@ app.locals.timeAgo = function (date) {
 
 app.set('view engine', 'ejs');
 
+// HOMEPAGE ROUTE
 app.get('/', async (req, res) => {
     try {
       // Get the current page number from the query (default to page 1)
@@ -103,7 +119,7 @@ app.get('/', async (req, res) => {
   
       // Attach userVote to each post if user is logged in
       if (req.session.authUserId) {
-        const userVotes = await Vote.find({ user: req.session.authUserId }).lean();
+        const userVotes = await Vote.find({ user: req.session.authUserId, post: { $ne: null } }).lean();
         const votesByPostId = {};
         userVotes.forEach(vote => {
           votesByPostId[vote.post.toString()] = vote.value;
@@ -129,13 +145,6 @@ app.get('/', async (req, res) => {
       });
     } catch (err) {
       console.error('Error fetching posts:', err);
-      res.status(500).send('Server error');
+      res.status(500).send('Error rendering index');
     }
 });
-
-
-app.use(postRouter);
-app.use('/auth', authRouter);
-app.use('/users', userRouter);
-
-app.listen(3000);
